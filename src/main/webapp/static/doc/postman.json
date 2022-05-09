@@ -1,0 +1,90 @@
+{
+  "info": {
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "ce995793-a573-4768-9af4-4659233f514f",
+    "name": "初识smart-doc"
+  },
+  "item": [
+    {
+      "name": "用户接口",
+      "item": [
+        {
+          "name": "根据用户id查询用户信息",
+          "request": {
+            "method": "GET",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "id",
+                  "type": "text",
+                  "description": "用户id",
+                  "value": "745"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8080/javaweb/user/getUserById?id\u003d745",
+              "protocol": "http",
+              "path": [
+                "",
+                "javaweb",
+                "user",
+                "getUserById"
+              ],
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "query": [
+                {
+                  "key": "id",
+                  "value": "320",
+                  "description": "用户id"
+                }
+              ],
+              "variable": []
+            },
+            "description": "根据用户id查询用户信息",
+            "header": []
+          },
+          "description": "根据用户id查询用户信息"
+        },
+        {
+          "name": "注册用户",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"renda.goyette\",\n  \"userPassword\": \"6g24f7\",\n  \"userTel\": 491\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/javaweb/user/register",
+              "protocol": "http",
+              "path": [
+                "",
+                "javaweb",
+                "user",
+                "register"
+              ],
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "query": [],
+              "variable": []
+            },
+            "description": "注册用户",
+            "header": []
+          },
+          "description": "注册用户"
+        }
+      ]
+    }
+  ]
+}
