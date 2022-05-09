@@ -4,6 +4,7 @@ import com.javaweb.base.common.CommonResponse;
 import com.javaweb.pojo.DAO.FinalUserAccountDAO;
 import com.javaweb.pojo.DTO.UserRegisterDTO;
 import com.javaweb.service.UserService;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
