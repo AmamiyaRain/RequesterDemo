@@ -1,135 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.javaweb.mapper.FinalUserAccountMapper">
-  <resultMap id="BaseResultMap" type="com.javaweb.pojo.DAO.FinalUserAccountDAO">
-    <!--@mbg.generated-->
-    <!--@Table final_user_account-->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="user_name" jdbcType="CHAR" property="userName" />
-    <result column="user_tel" jdbcType="INTEGER" property="userTel" />
-    <result column="user_password" jdbcType="CHAR" property="userPassword" />
-    <result column="user_email" jdbcType="CHAR" property="userEmail" />
-    <result column="user_stu_no" jdbcType="CHAR" property="userStuNo" />
-    <result column="user_avatar" jdbcType="CHAR" property="userAvatar" />
-    <result column="user_permission" jdbcType="CHAR" property="userPermission" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, user_name, user_tel, user_password, user_email, user_stu_no, user_avatar, user_permission
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select 
-    <include refid="Base_Column_List" />
-    from final_user_account
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from final_user_account
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.javaweb.pojo.DAO.FinalUserAccountDAO" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into final_user_account (user_name, user_tel, user_password, 
-      user_email, user_stu_no, user_avatar, user_salt,
-      user_permission)
-    values (#{userName,jdbcType=CHAR}, #{userTel,jdbcType=INTEGER}, #{userPassword,jdbcType=CHAR}, 
-      #{userEmail,jdbcType=CHAR}, #{userStuNo,jdbcType=CHAR}, #{userAvatar,jdbcType=CHAR}, #{userSalt,jdbcType=CHAR},
-      #{userPermission,jdbcType=CHAR})
-  </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.javaweb.pojo.DAO.FinalUserAccountDAO" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into final_user_account
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="userName != null">
-        user_name,
-      </if>
-      <if test="userTel != null">
-        user_tel,
-      </if>
-      <if test="userPassword != null">
-        user_password,
-      </if>
-      <if test="userEmail != null">
-        user_email,
-      </if>
-      <if test="userStuNo != null">
-        user_stu_no,
-      </if>
-      <if test="userAvatar != null">
-        user_avatar,
-      </if>
-      <if test="userPermission != null">
-        user_permission,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="userName != null">
-        #{userName,jdbcType=CHAR},
-      </if>
-      <if test="userTel != null">
-        #{userTel,jdbcType=INTEGER},
-      </if>
-      <if test="userPassword != null">
-        #{userPassword,jdbcType=CHAR},
-      </if>
-      <if test="userEmail != null">
-        #{userEmail,jdbcType=CHAR},
-      </if>
-      <if test="userStuNo != null">
-        #{userStuNo,jdbcType=CHAR},
-      </if>
-      <if test="userAvatar != null">
-        #{userAvatar,jdbcType=CHAR},
-      </if>
-      <if test="userPermission != null">
-        #{userPermission,jdbcType=CHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.javaweb.pojo.DAO.FinalUserAccountDAO">
-    <!--@mbg.generated-->
-    update final_user_account
-    <set>
-      <if test="userName != null">
-        user_name = #{userName,jdbcType=CHAR},
-      </if>
-      <if test="userTel != null">
+<mapper namespace="com.web.mapper.FinalUserAccountMapper">
+    <resultMap id="BaseResultMap" type="com.web.pojo.DAO.FinalUserAccountDAO">
+        <!--@mbg.generated-->
+        <!--@Table final_user_account-->
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="user_name" jdbcType="CHAR" property="userName" />
+        <result column="user_tel" jdbcType="INTEGER" property="userTel" />
+        <result column="user_password" jdbcType="CHAR" property="userPassword" />
+        <result column="user_email" jdbcType="CHAR" property="userEmail" />
+        <result column="user_stu_no" jdbcType="CHAR" property="userStuNo" />
+        <result column="user_avatar" jdbcType="CHAR" property="userAvatar" />
+        <result column="user_permission" jdbcType="CHAR" property="userPermission" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, user_name, user_tel, user_password, user_email, user_stu_no, user_avatar, user_permission
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List" />
+        from final_user_account
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete from final_user_account
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.web.pojo.DAO.FinalUserAccountDAO" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into final_user_account (user_name, user_tel, user_password,
+        user_email, user_stu_no, user_avatar, user_salt,
+        user_permission)
+        values (#{userName,jdbcType=CHAR}, #{userTel,jdbcType=INTEGER}, #{userPassword,jdbcType=CHAR},
+        #{userEmail,jdbcType=CHAR}, #{userStuNo,jdbcType=CHAR}, #{userAvatar,jdbcType=CHAR}, #{userSalt,jdbcType=CHAR},
+        #{userPermission,jdbcType=CHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.web.pojo.DAO.FinalUserAccountDAO" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into final_user_account
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="userTel != null">
+                user_tel,
+            </if>
+            <if test="userPassword != null">
+                user_password,
+            </if>
+            <if test="userEmail != null">
+                user_email,
+            </if>
+            <if test="userStuNo != null">
+                user_stu_no,
+            </if>
+            <if test="userAvatar != null">
+                user_avatar,
+            </if>
+            <if test="userPermission != null">
+                user_permission,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userName != null">
+                #{userName,jdbcType=CHAR},
+            </if>
+            <if test="userTel != null">
+                #{userTel,jdbcType=INTEGER},
+            </if>
+            <if test="userPassword != null">
+                #{userPassword,jdbcType=CHAR},
+            </if>
+            <if test="userEmail != null">
+                #{userEmail,jdbcType=CHAR},
+            </if>
+            <if test="userStuNo != null">
+                #{userStuNo,jdbcType=CHAR},
+            </if>
+            <if test="userAvatar != null">
+                #{userAvatar,jdbcType=CHAR},
+            </if>
+            <if test="userPermission != null">
+                #{userPermission,jdbcType=CHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.web.pojo.DAO.FinalUserAccountDAO">
+        <!--@mbg.generated-->
+        update final_user_account
+        <set>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=CHAR},
+            </if>
+            <if test="userTel != null">
+                user_tel = #{userTel,jdbcType=INTEGER},
+            </if>
+            <if test="userPassword != null">
+                user_password = #{userPassword,jdbcType=CHAR},
+            </if>
+            <if test="userEmail != null">
+                user_email = #{userEmail,jdbcType=CHAR},
+            </if>
+            <if test="userStuNo != null">
+                user_stu_no = #{userStuNo,jdbcType=CHAR},
+            </if>
+            <if test="userAvatar != null">
+                user_avatar = #{userAvatar,jdbcType=CHAR},
+            </if>
+            <if test="userPermission != null">
+                user_permission = #{userPermission,jdbcType=CHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.web.pojo.DAO.FinalUserAccountDAO">
+        <!--@mbg.generated-->
+        update final_user_account
+        set user_name = #{userName,jdbcType=CHAR},
         user_tel = #{userTel,jdbcType=INTEGER},
-      </if>
-      <if test="userPassword != null">
         user_password = #{userPassword,jdbcType=CHAR},
-      </if>
-      <if test="userEmail != null">
         user_email = #{userEmail,jdbcType=CHAR},
-      </if>
-      <if test="userStuNo != null">
         user_stu_no = #{userStuNo,jdbcType=CHAR},
-      </if>
-      <if test="userAvatar != null">
         user_avatar = #{userAvatar,jdbcType=CHAR},
-      </if>
-      <if test="userPermission != null">
-        user_permission = #{userPermission,jdbcType=CHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.javaweb.pojo.DAO.FinalUserAccountDAO">
-    <!--@mbg.generated-->
-    update final_user_account
-    set user_name = #{userName,jdbcType=CHAR},
-      user_tel = #{userTel,jdbcType=INTEGER},
-      user_password = #{userPassword,jdbcType=CHAR},
-      user_email = #{userEmail,jdbcType=CHAR},
-      user_stu_no = #{userStuNo,jdbcType=CHAR},
-      user_avatar = #{userAvatar,jdbcType=CHAR},
-      user_permission = #{userPermission,jdbcType=CHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+        user_permission = #{userPermission,jdbcType=CHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 
-  <select id="selectByUserName" resultMap="BaseResultMap">
-    select * from final_user_account where user_name = #{userName,jdbcType=CHAR}
+    <select id="selectByUserName" resultMap="BaseResultMap">
+        select * from final_user_account where user_name = #{userName,jdbcType=CHAR}
     </select>
 </mapper>
