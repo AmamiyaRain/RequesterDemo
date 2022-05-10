@@ -1,7 +1,7 @@
 {
   "info": {
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_postman_id": "ce995793-a573-4768-9af4-4659233f514f",
+    "_postman_id": "bf637e0b-7838-4ff4-8d67-b4e69baae7d6",
     "name": "初识smart-doc"
   },
   "item": [
@@ -19,12 +19,12 @@
                   "key": "id",
                   "type": "text",
                   "description": "用户id",
-                  "value": "745"
+                  "value": "969"
                 }
               ]
             },
             "url": {
-              "raw": "http://localhost:8080/javaweb/user/getUserById?id\u003d745",
+              "raw": "http://localhost:8080/javaweb/user/getUserById?id\u003d969",
               "protocol": "http",
               "path": [
                 "",
@@ -39,7 +39,7 @@
               "query": [
                 {
                   "key": "id",
-                  "value": "320",
+                  "value": "371",
                   "description": "用户id"
                 }
               ],
@@ -56,7 +56,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"userName\": \"renda.goyette\",\n  \"userPassword\": \"6g24f7\",\n  \"userTel\": 491\n}",
+              "raw": "{\n  \"userName\": \"rosia.hane\",\n  \"userPassword\": \"lmw8cc\",\n  \"userTel\": 37\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -83,6 +83,39 @@
             "header": []
           },
           "description": "注册用户"
+        },
+        {
+          "name": "Interface name is not set.",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"rosia.hane\",\n  \"userPassword\": \"iafors\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/javaweb/user/login",
+              "protocol": "http",
+              "path": [
+                "",
+                "javaweb",
+                "user",
+                "login"
+              ],
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "query": [],
+              "variable": []
+            },
+            "description": "",
+            "header": []
+          }
         }
       ]
     }

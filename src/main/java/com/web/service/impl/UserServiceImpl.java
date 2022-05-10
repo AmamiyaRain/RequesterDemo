@@ -1,6 +1,5 @@
 package com.web.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.web.base.enums.BusinessErrorEnum;
 import com.web.base.exceptions.BusinessException;
 import com.web.mapper.FinalUserAccountMapper;
@@ -8,8 +7,10 @@ import com.web.pojo.DAO.FinalUserAccountDAO;
 import com.web.pojo.DTO.user.UserLoginDTO;
 import com.web.pojo.DTO.user.UserRegisterDTO;
 import com.web.pojo.VO.user.UserLoginVO;
+import com.web.pojo.VO.user.UserTokenVO;
 import com.web.service.UserService;
 import com.web.util.security.SecurityUtil;
+import com.web.util.security.TokenUtil;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -79,7 +80,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserLoginVO login(UserLoginDTO userLoginDTO) {
+	public UserTokenVO login(UserLoginDTO userLoginDTO) {
 		if (Strings.isEmpty(userLoginDTO.getUserName()) || Strings.isEmpty(userLoginDTO.getUserPassword())) {
 			throw new BusinessException(BusinessErrorEnum.MISSING_REQUIRED_PARAMETERS);
 		}
@@ -97,19 +98,24 @@ public class UserServiceImpl implements UserService {
 			throw new BusinessException(BusinessErrorEnum.LOGIN_FAILED);
 		}
 
+		return getLoginSuccessUserVO(finalUserAccountDAO);
 	}
 
-	private UserLoginVO getLoginSuccessUserVO(FinalUserAccountDAO finalUserAccountDAO) throws JsonProcessingException {
+	@Override
+	public UserTokenVO getLoginSuccessUserVO(FinalUserAccountDAO finalUserAccountDAO) {
 		// 创建用户视图模型
 		UserLoginVO userVO = new UserLoginVO();
 		BeanUtils.copyProperties(finalUserAccountDAO, userVO);
 
-//		// 创建用户登录成功视图模型
-//		LoginSuccessUserVO loginSuccessUserVO = new LoginSuccessUserVO();
-//		BeanUtils.copyProperties(userVO, loginSuccessUserVO);
-//		loginSuccessUserVO.setToken(TokenUtil.createJwt(userVO));
+		// 创建用户登录成功视图模型
+		UserTokenVO userTokenVO = new UserTokenVO();
+		try {
+			userTokenVO.setUserToken(TokenUtil.createJwt(userVO));
+		} catch (Exception e) {
+			throw new BusinessException(BusinessErrorEnum.TOKEN_GENERATE_FAILED);
+		}
 
-//		return loginSuccessUserVO;
+		return userTokenVO;
 	}
 }
 

@@ -35,6 +35,7 @@ public enum BusinessErrorEnum implements CommonError {
     COMPANY_ABBR_IS_MISSING(20009, "系统管理员注册帐号必须包含公司简称"),
     REGISTER_FAILED(20010, "注册失败"),
     CANNOT_DELETE_OWN_ACCOUNT(20011, "不能删除自己的帐号"),
+    TOKEN_GENERATE_FAILED(20012, "生成Token失败"),
 
     /**
      * 验证相关 （3xx）

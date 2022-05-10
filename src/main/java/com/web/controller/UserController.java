@@ -2,7 +2,9 @@ package com.web.controller;
 
 import com.web.base.common.CommonResponse;
 import com.web.pojo.DAO.FinalUserAccountDAO;
+import com.web.pojo.DTO.user.UserLoginDTO;
 import com.web.pojo.DTO.user.UserRegisterDTO;
+import com.web.pojo.VO.user.UserTokenVO;
 import com.web.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -56,7 +58,8 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation(value = "登录用户", notes = "登录用户")
-    public CommonResponse<String> login(@RequestBody UserRegisterDTO userRegisterDTO, HttpServletRequest request) {
-        return CommonResponse.create(null,"登录成功");
+    public CommonResponse<UserTokenVO> login(@RequestBody UserLoginDTO userLoginDTO, HttpServletRequest request) {
+        UserTokenVO userTokenVO = userService.login(userLoginDTO);
+        return CommonResponse.create(userTokenVO,"登录成功");
     }
 }
