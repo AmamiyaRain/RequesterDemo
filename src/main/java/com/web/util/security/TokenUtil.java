@@ -140,7 +140,7 @@ public class TokenUtil {
 		throw new BusinessException(BusinessErrorEnum.LOGIN_OUT_DATED);
 	}
 
-	public static <T> T getUserInfoFromHttpServletRequest(HttpServletRequest request, Class<T> cls)  {
+	public static <T> T getUserInfoFromHttpServletRequest(HttpServletRequest request, Class<T> cls) {
 		String token = request.getHeader(getTokenHeader());
 		if (token == null) {
 			throw new BusinessException(BusinessErrorEnum.NOT_LOGGED_IN);

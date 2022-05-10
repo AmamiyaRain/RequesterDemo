@@ -6,9 +6,9 @@ package com.web.base.common;
 
 
 public interface CommonError {
-    int getErrCode();
+	int getErrCode();
 
-    String getErrMsg();
+	String getErrMsg();
 
-    void setErrMsg(String msg);
+	void setErrMsg(String msg);
 }

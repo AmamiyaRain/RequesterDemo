@@ -22,31 +22,34 @@ import static com.google.common.collect.Lists.newArrayList;
 @EnableSwagger2
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.web.controller"})// 扫描路径
+/**
+ * SwaggerAPI生成文档的配置文件
+ */
 public class Swagger2Config {
-    @Bean
-    public Docket createRestApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build()
-                .securitySchemes(security());
-    }
+	@Bean
+	public Docket createRestApi() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.apiInfo(apiInfo())
+				.select()
+				.apis(RequestHandlerSelectors.any())
+				.paths(PathSelectors.any())
+				.build()
+				.securitySchemes(security());
+	}
 
-    private List<ApiKey> security() {
-        return newArrayList(
-                new ApiKey("token", "token", "header")
-        );
-    }
+	private List<ApiKey> security() {
+		return newArrayList(
+				new ApiKey("token", "token", "header")
+		);
+	}
 
 
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("JavaWebFinal API")
-                .description("NXY666_NB_API")
-                .termsOfServiceUrl("http://localhost:8080/")
-                .version("99.0.0")
-                .build();
-    }
+	private ApiInfo apiInfo() {
+		return new ApiInfoBuilder()
+				.title("JavaWebFinal API")
+				.description("NXY666_NB_API")
+				.termsOfServiceUrl("http://localhost:8080/")
+				.version("99.0.0")
+				.build();
+	}
 }

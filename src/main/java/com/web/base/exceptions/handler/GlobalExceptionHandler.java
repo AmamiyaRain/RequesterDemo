@@ -17,44 +17,44 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(BusinessException.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public Object handleException(BusinessException exception) {
-        exception.printStackTrace();
-        return CommonResponse.create(exception.getErrCode(), "", exception.getErrMsg());
-    }
+	@ExceptionHandler(BusinessException.class)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Object handleException(BusinessException exception) {
+		exception.printStackTrace();
+		return CommonResponse.create(exception.getErrCode(), "", exception.getErrMsg());
+	}
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public Object handleException(MethodArgumentNotValidException exception) {
-        FieldError fieldError = exception.getBindingResult().getFieldError();
-        assert fieldError != null;
-        return CommonResponse.create(500, "", fieldError.getDefaultMessage());
-    }
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Object handleException(MethodArgumentNotValidException exception) {
+		FieldError fieldError = exception.getBindingResult().getFieldError();
+		assert fieldError != null;
+		return CommonResponse.create(500, "", fieldError.getDefaultMessage());
+	}
 
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public Object handleException(DataIntegrityViolationException exception) {
-        if (exception instanceof DuplicateKeyException) {
-            return CommonResponse.create(500, "", "数据已存在");
-        }
-        return CommonResponse.create(500, "", "数据异常");
-    }
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Object handleException(DataIntegrityViolationException exception) {
+		if (exception instanceof DuplicateKeyException) {
+			return CommonResponse.create(500, "", "数据已存在");
+		}
+		return CommonResponse.create(500, "", "数据异常");
+	}
 
-    /**
-     * 异常处理函数
-     * 处理所有Controller类抛出的异常
-     */
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public Object handlerException(Exception ex) {
-        return CommonResponse.create(500, new Object(), "请求出现异常");
-    }
+	/**
+	 * 异常处理函数
+	 * 处理所有Controller类抛出的异常
+	 */
+	@ExceptionHandler(Exception.class)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Object handlerException(Exception ex) {
+		return CommonResponse.create(500, new Object(), "请求出现异常");
+	}
 
 
 }

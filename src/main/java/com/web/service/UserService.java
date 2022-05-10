@@ -9,22 +9,22 @@ import com.web.pojo.VO.user.UserTokenVO;
 public interface UserService {
 
 
-    int deleteByPrimaryKey(Integer id);
+	int deleteByPrimaryKey(Integer id);
 
-    int insert(FinalUserAccountDAO record);
+	int insert(FinalUserAccountDAO record);
 
-    int insertSelective(FinalUserAccountDAO record);
+	int insertSelective(FinalUserAccountDAO record);
 
-    FinalUserAccountDAO selectByPrimaryKey(Integer id);
+	FinalUserAccountDAO selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(FinalUserAccountDAO record);
+	int updateByPrimaryKeySelective(FinalUserAccountDAO record);
 
-    int updateByPrimaryKey(FinalUserAccountDAO record);
+	int updateByPrimaryKey(FinalUserAccountDAO record);
 
-    void register(UserRegisterDTO userRegisterDTO);
+	void register(UserRegisterDTO userRegisterDTO);
 
-    UserTokenVO login(UserLoginDTO userLoginDTO);
+	UserTokenVO login(UserLoginDTO userLoginDTO);
 
-    UserTokenVO getLoginSuccessUserVO(FinalUserAccountDAO finalUserAccountDAO) throws JsonProcessingException;
+	UserTokenVO getLoginSuccessUserVO(FinalUserAccountDAO finalUserAccountDAO) throws JsonProcessingException;
 
 }
