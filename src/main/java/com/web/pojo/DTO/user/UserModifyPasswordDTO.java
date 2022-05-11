@@ -8,7 +8,7 @@ import lombok.ToString;
 @Data
 @ToString
 @EqualsAndHashCode
-public class UserModifyPassword {
+public class UserModifyPasswordDTO {
 
 	@ApiModelProperty(value = "用户名")
 	private String userName;

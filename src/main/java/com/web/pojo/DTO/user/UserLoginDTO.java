@@ -9,6 +9,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class UserLoginDTO {
+
 	@ApiModelProperty(value = "用户名")
 	private String userName;
 
