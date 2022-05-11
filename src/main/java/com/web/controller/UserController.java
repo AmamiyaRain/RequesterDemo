@@ -3,9 +3,12 @@ package com.web.controller;
 import com.web.base.common.CommonResponse;
 import com.web.pojo.DAO.FinalUserAccountDAO;
 import com.web.pojo.DTO.user.UserLoginDTO;
+import com.web.pojo.DTO.user.UserModifyPasswordDTO;
 import com.web.pojo.DTO.user.UserRegisterDTO;
+import com.web.pojo.VO.user.UserLoginVO;
 import com.web.pojo.VO.user.UserTokenVO;
 import com.web.service.UserService;
+import com.web.util.security.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -63,5 +66,13 @@ public class UserController {
 	public CommonResponse<UserTokenVO> login(@RequestBody UserLoginDTO userLoginDTO, HttpServletRequest request) {
 		UserTokenVO userTokenVO = userService.login(userLoginDTO);
 		return CommonResponse.create(userTokenVO, "登录成功");
+	}
+
+	@PostMapping("/modifyPassword")
+	@ApiOperation(value = "修改密码", notes = "修改密码")
+	public CommonResponse<String> modifyPassword(@RequestBody UserModifyPasswordDTO userModifyPasswordDTO, HttpServletRequest request) {
+		UserLoginVO userLoginVO = TokenUtil.getUserInfoFromHttpServletRequest(request, UserLoginVO.class);
+		userService.modifyPassword(userModifyPasswordDTO, userLoginVO);
+		return CommonResponse.create(null, "修改成功");
 	}
 }

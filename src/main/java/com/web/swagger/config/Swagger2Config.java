@@ -39,7 +39,7 @@ public class Swagger2Config {
 
 	private List<ApiKey> security() {
 		return newArrayList(
-				new ApiKey("token", "token", "header")
+				new ApiKey("Authorization", "Authorization", "header")
 		);
 	}
 

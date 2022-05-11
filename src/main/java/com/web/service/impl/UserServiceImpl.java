@@ -5,11 +5,13 @@ import com.web.base.exceptions.BusinessException;
 import com.web.mapper.FinalUserAccountMapper;
 import com.web.pojo.DAO.FinalUserAccountDAO;
 import com.web.pojo.DTO.user.UserLoginDTO;
+import com.web.pojo.DTO.user.UserModifyPasswordDTO;
 import com.web.pojo.DTO.user.UserRegisterDTO;
 import com.web.pojo.VO.user.UserLoginVO;
 import com.web.pojo.VO.user.UserTokenVO;
 import com.web.service.UserService;
 import com.web.util.security.SecurityUtil;
+import com.web.util.security.SyncUtil;
 import com.web.util.security.TokenUtil;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
@@ -125,6 +127,41 @@ public class UserServiceImpl implements UserService {
 		return userTokenVO;
 	}
 
-
+	@Override
+	public void modifyPassword(UserModifyPasswordDTO userModifyPasswordDTO, UserLoginVO userLoginVO) {
+		if (SyncUtil.start(userModifyPasswordDTO)) {
+			try {
+				FinalUserAccountDAO finalUserAccountDAO = finalUserAccountMapper.selectByUserName(userLoginVO.getUserName());
+				if (finalUserAccountDAO == null) {
+					throw new BusinessException(BusinessErrorEnum.USER_NOT_EXISTS);
+				}
+				if (Strings.isEmpty(userModifyPasswordDTO.getUserName()) || Strings.isEmpty(userModifyPasswordDTO.getUserPassword()) || Strings.isEmpty(userModifyPasswordDTO.getUpdatedUserPassword())) {
+					throw new BusinessException(BusinessErrorEnum.MISSING_REQUIRED_PARAMETERS);
+				}
+				String oldPassword;
+				try {
+					oldPassword = SecurityUtil.getMd5(finalUserAccountDAO.getUserPassword(), finalUserAccountDAO.getUserSalt());
+				} catch (Exception e) {
+					throw new BusinessException(BusinessErrorEnum.CHECK_OLD_PASSWORD_FAILED);
+				}
+				if (!oldPassword.equals(userModifyPasswordDTO.getUserPassword())) {
+					throw new BusinessException(BusinessErrorEnum.CHECK_OLD_PASSWORD_FAILED);
+				}
+				if (userModifyPasswordDTO.getUserPassword().equals(userModifyPasswordDTO.getUpdatedUserPassword())) {
+					throw new BusinessException(BusinessErrorEnum.PASSWORD_IS_SAME);
+				}
+				try {
+					finalUserAccountDAO.setUserPassword(SecurityUtil.getMd5(userModifyPasswordDTO.getUpdatedUserPassword(), finalUserAccountDAO.getUserSalt()));
+					finalUserAccountMapper.updateByPrimaryKey(finalUserAccountDAO);
+				} catch (Exception e) {
+					throw new BusinessException(BusinessErrorEnum.FAILED_TO_MODIFY_PASSWORD);
+				}
+			} finally {
+				SyncUtil.finish(userModifyPasswordDTO);
+			}
+		} else {
+			throw new BusinessException(BusinessErrorEnum.REQUEST_IS_HANDLING);
+		}
+	}
 }
 

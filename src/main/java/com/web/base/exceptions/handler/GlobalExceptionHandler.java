@@ -6,7 +6,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,9 +17,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
-
-
 	@ExceptionHandler(BusinessException.class)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -54,16 +50,9 @@ public class GlobalExceptionHandler {
 	 * 处理所有Controller类抛出的异常
 	 */
 	@ExceptionHandler(Exception.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public Object handleBadRequestException(Exception ex) {
-		return CommonResponse.create(500, new Object(), "数据出现异常");
-	}
-
-	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-	@ResponseBody
-	public Object handleMethodNotAllowedException(Exception ex) {
+	public Object handlerException(Exception ex) {
 		return CommonResponse.create(500, new Object(), "请求出现异常");
 	}
 

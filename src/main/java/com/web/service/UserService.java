@@ -3,7 +3,9 @@ package com.web.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.web.pojo.DAO.FinalUserAccountDAO;
 import com.web.pojo.DTO.user.UserLoginDTO;
+import com.web.pojo.DTO.user.UserModifyPasswordDTO;
 import com.web.pojo.DTO.user.UserRegisterDTO;
+import com.web.pojo.VO.user.UserLoginVO;
 import com.web.pojo.VO.user.UserTokenVO;
 
 public interface UserService {
@@ -26,5 +28,7 @@ public interface UserService {
 	UserTokenVO login(UserLoginDTO userLoginDTO);
 
 	UserTokenVO getLoginSuccessUserVO(FinalUserAccountDAO finalUserAccountDAO) throws JsonProcessingException;
+
+	void modifyPassword(UserModifyPasswordDTO userModifyPasswordDTO, UserLoginVO userLoginVO);
 
 }
