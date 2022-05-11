@@ -25,7 +25,7 @@ public class UserRegisterDTO implements Serializable {
      * 用户手机号
      */
     @ApiModelProperty(value = "用户手机号")
-    private Integer userTel;
+    private String userTel;
 
     public UserRegisterDTO() {
     }
