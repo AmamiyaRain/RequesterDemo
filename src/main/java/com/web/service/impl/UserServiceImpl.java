@@ -2,7 +2,7 @@ package com.web.service.impl;
 
 import com.web.base.enums.BusinessErrorEnum;
 import com.web.base.exceptions.BusinessException;
-import com.web.mapper.FinalUserAccountMapper;
+import com.web.mapper.UserMapper;
 import com.web.pojo.DAO.FinalUserAccountDAO;
 import com.web.pojo.DTO.user.UserLoginDTO;
 import com.web.pojo.DTO.user.UserModifyPasswordDTO;
@@ -25,36 +25,36 @@ public class UserServiceImpl implements UserService {
 
 
 	@Resource
-	private FinalUserAccountMapper finalUserAccountMapper;
+	private UserMapper userMapper;
 
 	@Override
 	public int deleteByPrimaryKey(Integer id) {
-		return finalUserAccountMapper.deleteByPrimaryKey(id);
+		return userMapper.deleteByPrimaryKey(id);
 	}
 
 	@Override
 	public int insert(FinalUserAccountDAO record) {
-		return finalUserAccountMapper.insert(record);
+		return userMapper.insert(record);
 	}
 
 	@Override
 	public int insertSelective(FinalUserAccountDAO record) {
-		return finalUserAccountMapper.insertSelective(record);
+		return userMapper.insertSelective(record);
 	}
 
 	@Override
 	public FinalUserAccountDAO selectByPrimaryKey(Integer id) {
-		return finalUserAccountMapper.selectByPrimaryKey(id);
+		return userMapper.selectByPrimaryKey(id);
 	}
 
 	@Override
 	public int updateByPrimaryKeySelective(FinalUserAccountDAO record) {
-		return finalUserAccountMapper.updateByPrimaryKeySelective(record);
+		return userMapper.updateByPrimaryKeySelective(record);
 	}
 
 	@Override
 	public int updateByPrimaryKey(FinalUserAccountDAO record) {
-		return finalUserAccountMapper.updateByPrimaryKey(record);
+		return userMapper.updateByPrimaryKey(record);
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
 			throw new BusinessException(BusinessErrorEnum.MISSING_REQUIRED_PARAMETERS);
 		}
 
-		if (finalUserAccountMapper.selectByUserName(userRegisterDTO.getUserName()) != null) {
+		if (userMapper.selectByUserName(userRegisterDTO.getUserName()) != null) {
 			throw new BusinessException(BusinessErrorEnum.USER_ALREADY_EXISTS);
 		}
 		String salt = SecurityUtil.getDefaultLengthSalt();
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
 			finalUserAccountDAO.setUserTel(userRegisterDTO.getUserTel());
 			finalUserAccountDAO.setUserSalt(salt);
 			finalUserAccountDAO.setUserRole(1);
-			finalUserAccountMapper.insert(finalUserAccountDAO);
+			userMapper.insert(finalUserAccountDAO);
 		} catch (Exception e) {
 			throw new BusinessException(BusinessErrorEnum.REGISTER_FAILED);
 		}
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
 		if (Strings.isEmpty(userLoginDTO.getUserName()) || Strings.isEmpty(userLoginDTO.getUserPassword())) {
 			throw new BusinessException(BusinessErrorEnum.MISSING_REQUIRED_PARAMETERS);
 		}
-		FinalUserAccountDAO finalUserAccountDAO = finalUserAccountMapper.selectByUserName(userLoginDTO.getUserName());
+		FinalUserAccountDAO finalUserAccountDAO = userMapper.selectByUserName(userLoginDTO.getUserName());
 		if (finalUserAccountDAO == null) {
 			throw new BusinessException(BusinessErrorEnum.USER_NOT_EXISTS);
 		}
@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
 	public void modifyPassword(UserModifyPasswordDTO userModifyPasswordDTO, UserLoginVO userLoginVO) {
 		if (SyncUtil.start(userModifyPasswordDTO)) {
 			try {
-				FinalUserAccountDAO finalUserAccountDAO = finalUserAccountMapper.selectByUserName(userLoginVO.getUserName());
+				FinalUserAccountDAO finalUserAccountDAO = userMapper.selectByUserName(userLoginVO.getUserName());
 				if (finalUserAccountDAO == null) {
 					throw new BusinessException(BusinessErrorEnum.USER_NOT_EXISTS);
 				}
@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
 				}
 				try {
 					finalUserAccountDAO.setUserPassword(SecurityUtil.getMd5(userModifyPasswordDTO.getUpdatedUserPassword(), finalUserAccountDAO.getUserSalt()));
-					finalUserAccountMapper.updateByPrimaryKey(finalUserAccountDAO);
+					userMapper.updateByPrimaryKey(finalUserAccountDAO);
 				} catch (Exception e) {
 					throw new BusinessException(BusinessErrorEnum.FAILED_TO_MODIFY_PASSWORD);
 				}

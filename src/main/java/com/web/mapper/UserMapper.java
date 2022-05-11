@@ -2,7 +2,7 @@ package com.web.mapper;
 
 import com.web.pojo.DAO.FinalUserAccountDAO;
 
-public interface FinalUserAccountMapper {
+public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
 
     int insert(FinalUserAccountDAO record);

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.web.mapper.FinalUserAccountMapper">
+<mapper namespace="com.web.mapper.UserMapper">
     <resultMap id="BaseResultMap" type="com.web.pojo.DAO.FinalUserAccountDAO">
         <!--@mbg.generated-->
-        <!--@Table final_user_account-->
+        <!--@Table final_user-->
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="user_name" jdbcType="VARCHAR" property="userName"/>
         <result column="user_tel" jdbcType="VARCHAR" property="userTel"/>
@@ -21,19 +21,19 @@
         <!--@mbg.generated-->
         select
         <include refid="Base_Column_List"/>
-        from final_user_account
+        from final_user
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         <!--@mbg.generated-->
         delete
-        from final_user_account
+        from final_user
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.web.pojo.DAO.FinalUserAccountDAO"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
-        insert into final_user_account (user_name, user_tel, user_password,
+        insert into final_user (user_name, user_tel, user_password,
                                         user_email, user_stu_no, user_avatar, user_salt,
                                         user_role)
         values (#{userName,jdbcType=VARCHAR}, #{userTel,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR},
@@ -44,7 +44,7 @@
     <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.web.pojo.DAO.FinalUserAccountDAO"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
-        insert into final_user_account
+        insert into final_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userName != null">
                 user_name,
@@ -94,7 +94,7 @@
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.web.pojo.DAO.FinalUserAccountDAO">
         <!--@mbg.generated-->
-        update final_user_account
+        update final_user
         <set>
             <if test="userName != null">
                 user_name = #{userName,jdbcType=VARCHAR},
@@ -122,7 +122,7 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.web.pojo.DAO.FinalUserAccountDAO">
         <!--@mbg.generated-->
-        update final_user_account
+        update final_user
         set user_name       = #{userName,jdbcType=VARCHAR},
             user_tel        = #{userTel,jdbcType=VARCHAR},
             user_password   = #{userPassword,jdbcType=VARCHAR},
@@ -135,7 +135,7 @@
 
     <select id="selectByUserName" resultMap="BaseResultMap">
         select *
-        from final_user_account
+        from final_user
         where user_name = #{userName,jdbcType=VARCHAR}
     </select>
 </mapper>
