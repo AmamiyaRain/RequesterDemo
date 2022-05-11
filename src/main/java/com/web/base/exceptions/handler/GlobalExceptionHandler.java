@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	public Object handleException(BusinessException exception) {
 		exception.printStackTrace();
-		return CommonResponse.create(exception.getErrCode(), "", exception.getErrMsg());
+		return CommonResponse.create(exception.getErrCode(), null, exception.getErrMsg());
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
 	public Object handleException(MethodArgumentNotValidException exception) {
 		FieldError fieldError = exception.getBindingResult().getFieldError();
 		assert fieldError != null;
-		return CommonResponse.create(500, "", fieldError.getDefaultMessage());
+		return CommonResponse.create(500, null, fieldError.getDefaultMessage());
 	}
 
 
@@ -40,9 +40,9 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	public Object handleException(DataIntegrityViolationException exception) {
 		if (exception instanceof DuplicateKeyException) {
-			return CommonResponse.create(500, "", "数据已存在");
+			return CommonResponse.create(500, null, "数据已存在");
 		}
-		return CommonResponse.create(500, "", "数据异常");
+		return CommonResponse.create(500, null, "数据异常");
 	}
 
 	/**

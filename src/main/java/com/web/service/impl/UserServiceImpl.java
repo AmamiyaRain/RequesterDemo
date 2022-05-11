@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 @Service
 public class UserServiceImpl implements UserService {
 
+
 	@Resource
 	private FinalUserAccountMapper finalUserAccountMapper;
 
@@ -72,11 +73,16 @@ public class UserServiceImpl implements UserService {
 			throw new BusinessException(BusinessErrorEnum.REGISTER_FAILED);
 		}
 		FinalUserAccountDAO finalUserAccountDAO = new FinalUserAccountDAO();
-		finalUserAccountDAO.setUserName(userRegisterDTO.getUserName());
-		finalUserAccountDAO.setUserPassword(encPassword);
-		finalUserAccountDAO.setUserTel(userRegisterDTO.getUserTel());
-		finalUserAccountDAO.setUserSalt(salt);
-		finalUserAccountMapper.insert(finalUserAccountDAO);
+		try {
+			finalUserAccountDAO.setUserName(userRegisterDTO.getUserName());
+			finalUserAccountDAO.setUserPassword(encPassword);
+			finalUserAccountDAO.setUserTel(userRegisterDTO.getUserTel());
+			finalUserAccountDAO.setUserSalt(salt);
+			finalUserAccountDAO.setUserRole(1);
+			finalUserAccountMapper.insert(finalUserAccountDAO);
+		} catch (Exception e) {
+			throw new BusinessException(BusinessErrorEnum.REGISTER_FAILED);
+		}
 	}
 
 	@Override
@@ -101,6 +107,7 @@ public class UserServiceImpl implements UserService {
 		return getLoginSuccessUserVO(finalUserAccountDAO);
 	}
 
+
 	@Override
 	public UserTokenVO getLoginSuccessUserVO(FinalUserAccountDAO finalUserAccountDAO) {
 		// 创建用户视图模型
@@ -117,5 +124,7 @@ public class UserServiceImpl implements UserService {
 
 		return userTokenVO;
 	}
+
+
 }
 

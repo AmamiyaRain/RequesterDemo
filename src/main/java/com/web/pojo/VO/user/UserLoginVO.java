@@ -25,5 +25,5 @@ public class UserLoginVO {
 	private String userAvatar;
 
 	@ApiModelProperty(value = "权限")
-	private String userPermission;
+	private String userRole;
 }

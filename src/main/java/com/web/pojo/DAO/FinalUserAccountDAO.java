@@ -50,8 +50,8 @@ public class FinalUserAccountDAO implements Serializable {
     /**
      * 用户权限
      */
-    @ApiModelProperty(value = "用户权限")
-    private String userPermission;
+    @ApiModelProperty(value = "角色")
+    private Integer userRole;
     /**
      * 密码盐
      */

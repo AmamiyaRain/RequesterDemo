@@ -22,12 +22,12 @@ public class TokenUtil {
 	/**
 	 * 私钥
 	 */
-	private static final String SECRET = "noteBook";
+	private static final String SECRET = "NXYIsRequester";
 
 	/**
-	 * 过期时间 24h
+	 * 过期时间 30天
 	 */
-	private static final long TTL = (72 * 60 * 60L);
+	private static final long TTL = (30 * 24 * 60 * 60L);
 
 	/**
 	 * 请求头参数名
@@ -68,7 +68,7 @@ public class TokenUtil {
 			return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new BusinessException(BusinessErrorEnum.LOGIN_OUT_DATED);
+			throw new BusinessException(BusinessErrorEnum.TOKEN_VALIDATION_FAILED);
 		}
 	}
 

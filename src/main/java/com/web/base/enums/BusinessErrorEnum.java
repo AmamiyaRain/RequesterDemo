@@ -21,6 +21,7 @@ public enum BusinessErrorEnum implements CommonError {
 	MISSING_REQUIRED_PARAMETERS(10009, "缺少必要的参数"),
 	INSUFFICIENT_NUMBER_OF_PARAMETERS(10010, "参数数量不足"),
 
+
 	/**
 	 * 用户相关 （2xx）
 	 */
@@ -36,6 +37,7 @@ public enum BusinessErrorEnum implements CommonError {
 	REGISTER_FAILED(20010, "注册失败"),
 	CANNOT_DELETE_OWN_ACCOUNT(20011, "不能删除自己的帐号"),
 	TOKEN_GENERATE_FAILED(20012, "生成Token失败"),
+	TOKEN_VALIDATION_FAILED(20013, "Token验证失败"),
 
 	/**
 	 * 验证相关 （3xx）
