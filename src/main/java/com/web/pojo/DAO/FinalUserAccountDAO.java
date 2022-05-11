@@ -26,7 +26,7 @@ public class FinalUserAccountDAO implements Serializable {
      * 手机号
      */
     @ApiModelProperty(value = "手机号")
-    private Integer userTel;
+    private String userTel;
     /**
      * 密码
      */
