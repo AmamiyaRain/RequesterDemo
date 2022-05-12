@@ -10,13 +10,13 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class UserModifyPasswordDTO {
 
-	@ApiModelProperty(value = "用户名")
+	@ApiModelProperty(value = "用户名",required = true)
 	private String userName;
 
-	@ApiModelProperty(value = "原密码")
+	@ApiModelProperty(value = "原密码",required = true)
 	private String userPassword;
 
-	@ApiModelProperty(value = "新密码")
+	@ApiModelProperty(value = "新密码",required = true)
 	private String updatedUserPassword;
 
 }

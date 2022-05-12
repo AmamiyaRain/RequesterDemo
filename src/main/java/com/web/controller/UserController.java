@@ -75,4 +75,8 @@ public class UserController {
 		userService.modifyPassword(userModifyPasswordDTO, userLoginVO);
 		return CommonResponse.create(null, "修改成功");
 	}
+
+//	@PostMapping("/deleteUser")
+//	@ApiOperation(value = "删除用户", notes = "删除用户")
+
 }

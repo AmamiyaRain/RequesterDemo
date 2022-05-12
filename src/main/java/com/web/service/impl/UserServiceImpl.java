@@ -16,7 +16,6 @@ import com.web.util.security.TokenUtil;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 
@@ -59,54 +58,66 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void register(UserRegisterDTO userRegisterDTO) {
-		if (userRegisterDTO.getUserTel() == null || StringUtils.isEmpty(userRegisterDTO.getUserPassword()) || StringUtils.isEmpty(userRegisterDTO.getUserName())
-		) {
-			throw new BusinessException(BusinessErrorEnum.MISSING_REQUIRED_PARAMETERS);
-		}
+		if (SyncUtil.start(userRegisterDTO)) {
+			try {
+				if (userRegisterDTO.getUserTel() == null || Strings.isEmpty(userRegisterDTO.getUserPassword()) || Strings.isEmpty(userRegisterDTO.getUserName())
+				) {
+					throw new BusinessException(BusinessErrorEnum.MISSING_REQUIRED_PARAMETERS);
+				}
 
-		if (userMapper.selectByUserName(userRegisterDTO.getUserName()) != null) {
-			throw new BusinessException(BusinessErrorEnum.USER_ALREADY_EXISTS);
-		}
-		String salt = SecurityUtil.getDefaultLengthSalt();
-		String encPassword;
-		try {
-			encPassword = SecurityUtil.getMd5(userRegisterDTO.getUserPassword(), salt);
-		} catch (Exception e) {
-			throw new BusinessException(BusinessErrorEnum.REGISTER_FAILED);
-		}
-		FinalUserAccountDAO finalUserAccountDAO = new FinalUserAccountDAO();
-		try {
-			finalUserAccountDAO.setUserName(userRegisterDTO.getUserName());
-			finalUserAccountDAO.setUserPassword(encPassword);
-			finalUserAccountDAO.setUserTel(userRegisterDTO.getUserTel());
-			finalUserAccountDAO.setUserSalt(salt);
-			finalUserAccountDAO.setUserRole(1);
-			userMapper.insert(finalUserAccountDAO);
-		} catch (Exception e) {
-			throw new BusinessException(BusinessErrorEnum.REGISTER_FAILED);
+				if (userMapper.selectByUserName(userRegisterDTO.getUserName()) != null) {
+					throw new BusinessException(BusinessErrorEnum.USER_ALREADY_EXISTS);
+				}
+				String salt = SecurityUtil.getDefaultLengthSalt();
+				String encPassword;
+				try {
+					encPassword = SecurityUtil.getMd5(userRegisterDTO.getUserPassword(), salt);
+				} catch (Exception e) {
+					throw new BusinessException(BusinessErrorEnum.REGISTER_FAILED);
+				}
+				FinalUserAccountDAO finalUserAccountDAO = new FinalUserAccountDAO();
+				try {
+					finalUserAccountDAO.setUserName(userRegisterDTO.getUserName());
+					finalUserAccountDAO.setUserPassword(encPassword);
+					finalUserAccountDAO.setUserTel(userRegisterDTO.getUserTel());
+					finalUserAccountDAO.setUserSalt(salt);
+					finalUserAccountDAO.setUserRole(1);
+					userMapper.insert(finalUserAccountDAO);
+				} catch (Exception e) {
+					throw new BusinessException(BusinessErrorEnum.REGISTER_FAILED);
+				}
+			} finally {
+				SyncUtil.finish(userRegisterDTO);
+			}
+		} else {
+			throw new BusinessException(BusinessErrorEnum.REQUEST_IS_HANDLING);
 		}
 	}
 
 	@Override
 	public UserTokenVO login(UserLoginDTO userLoginDTO) {
-		if (Strings.isEmpty(userLoginDTO.getUserName()) || Strings.isEmpty(userLoginDTO.getUserPassword())) {
-			throw new BusinessException(BusinessErrorEnum.MISSING_REQUIRED_PARAMETERS);
+		if (SyncUtil.start(userLoginDTO)) {
+			if (Strings.isEmpty(userLoginDTO.getUserName()) || Strings.isEmpty(userLoginDTO.getUserPassword())) {
+				throw new BusinessException(BusinessErrorEnum.MISSING_REQUIRED_PARAMETERS);
+			}
+			FinalUserAccountDAO finalUserAccountDAO = userMapper.selectByUserName(userLoginDTO.getUserName());
+			if (finalUserAccountDAO == null) {
+				throw new BusinessException(BusinessErrorEnum.USER_NOT_EXISTS);
+			}
+			String encPassword;
+			try {
+				encPassword = SecurityUtil.getMd5(userLoginDTO.getUserPassword(), finalUserAccountDAO.getUserSalt());
+			} catch (Exception e) {
+				throw new BusinessException(BusinessErrorEnum.ABNORMAL_DATA);
+			}
+			if (!encPassword.equals(finalUserAccountDAO.getUserPassword())) {
+				throw new BusinessException(BusinessErrorEnum.LOGIN_FAILED);
+			}
+			SyncUtil.finish(userLoginDTO);
+			return getLoginSuccessUserVO(finalUserAccountDAO);
+		} else {
+			throw new BusinessException(BusinessErrorEnum.REQUEST_IS_HANDLING);
 		}
-		FinalUserAccountDAO finalUserAccountDAO = userMapper.selectByUserName(userLoginDTO.getUserName());
-		if (finalUserAccountDAO == null) {
-			throw new BusinessException(BusinessErrorEnum.USER_NOT_EXISTS);
-		}
-		String encPassword;
-		try {
-			encPassword = SecurityUtil.getMd5(userLoginDTO.getUserPassword(), finalUserAccountDAO.getUserSalt());
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		if (!encPassword.equals(finalUserAccountDAO.getUserPassword())) {
-			throw new BusinessException(BusinessErrorEnum.LOGIN_FAILED);
-		}
-
-		return getLoginSuccessUserVO(finalUserAccountDAO);
 	}
 
 
@@ -115,7 +126,6 @@ public class UserServiceImpl implements UserService {
 		// 创建用户视图模型
 		UserLoginVO userVO = new UserLoginVO();
 		BeanUtils.copyProperties(finalUserAccountDAO, userVO);
-
 		// 创建用户登录成功视图模型
 		UserTokenVO userTokenVO = new UserTokenVO();
 		try {
@@ -123,7 +133,6 @@ public class UserServiceImpl implements UserService {
 		} catch (Exception e) {
 			throw new BusinessException(BusinessErrorEnum.TOKEN_GENERATE_FAILED);
 		}
-
 		return userTokenVO;
 	}
 
