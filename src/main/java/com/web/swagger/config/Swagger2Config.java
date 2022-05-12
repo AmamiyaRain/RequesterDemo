@@ -1,6 +1,5 @@
 package com.web.swagger.config;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -27,27 +26,25 @@ public class Swagger2Config {
 	@Bean
 	public Docket createRestApi() {
 		return new Docket(DocumentationType.SWAGGER_2)
-				.apiInfo(apiInfo())
-				.select()
-				.apis(RequestHandlerSelectors.any())
-				.paths(PathSelectors.any())
-				.build()
-				.securitySchemes(security());
+			.apiInfo(apiInfo())
+			.select()
+			.apis(RequestHandlerSelectors.any())
+			.paths(PathSelectors.any())
+			.build()
+			.securitySchemes(security());
 	}
 
 	private List<SecurityScheme> security() {
-		return newArrayList(
-				new ApiKey("Authorization", "Authorization", "header")
-		);
+		return newArrayList(new ApiKey("Authorization", "Authorization", "header"));
 	}
 
 
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
-				.title("JavaWebFinal API")
-				.description("NXY666_NB_API")
-				.termsOfServiceUrl("http://localhost:8080/")
-				.version("99.0.0")
-				.build();
+			.title("JavaWebFinal API")
+			.description("NXY & YBW")
+			.termsOfServiceUrl("http://localhost:8080/")
+			.version("6.6.6")
+			.build();
 	}
 }
