@@ -1,13 +1,14 @@
-package com.web.controller;
+package com.web.controllers.user;
 
 import com.web.base.common.CommonResponse;
-import com.web.pojo.DAO.FinalUserAccountDAO;
+import com.web.pojo.DAO.user.UserDAO;
+import com.web.pojo.DTO.user.UserDeleteDTO;
 import com.web.pojo.DTO.user.UserLoginDTO;
 import com.web.pojo.DTO.user.UserModifyPasswordDTO;
 import com.web.pojo.DTO.user.UserRegisterDTO;
 import com.web.pojo.VO.user.UserLoginVO;
 import com.web.pojo.VO.user.UserTokenVO;
-import com.web.service.UserService;
+import com.web.services.user.UserService;
 import com.web.util.security.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,21 +38,21 @@ public class UserController {
 	 * 根据用户id查询用户信息
 	 *
 	 * @param id 用户id
-	 * @return {@link CommonResponse<FinalUserAccountDAO>}
+	 * @return {@link CommonResponse< UserDAO >}
 	 */
 
 	@GetMapping("/getUserById")
 	@ApiOperation(value = "根据用户id查询用户信息", notes = "根据用户id查询用户信息")
-	public CommonResponse<FinalUserAccountDAO> getUser(@RequestParam(value = "id", required = true) int id) {
-		FinalUserAccountDAO finalUserAccountDAO = userService.selectByPrimaryKey(id);
-		return CommonResponse.create(finalUserAccountDAO, null);
+	public CommonResponse<UserDAO> getUser(@RequestParam(value = "id", required = true) int id) {
+		UserDAO userDAO = userService.selectByPrimaryKey(id);
+		return CommonResponse.create(userDAO, null);
 	}
 
 	/**
 	 * 注册用户
 	 *
 	 * @param userRegisterDTO 用户注册信息
-	 * @return {@link CommonResponse<FinalUserAccountDAO>}
+	 * @return {@link CommonResponse< UserDAO >}
 	 */
 
 	@PostMapping("/register")
@@ -76,7 +77,12 @@ public class UserController {
 		return CommonResponse.create(null, "修改成功");
 	}
 
-//	@PostMapping("/deleteUser")
-//	@ApiOperation(value = "删除用户", notes = "删除用户")
+	@PostMapping("/deleteUser")
+	@ApiOperation(value = "删除用户", notes = "删除用户")
+	public CommonResponse<String> deleteUser(@RequestBody UserDeleteDTO userDeleteDTO, HttpServletRequest request) {
+		UserLoginVO userLoginVO = TokenUtil.getUserInfoFromHttpServletRequest(request, UserLoginVO.class);
+		userService.deleteUser(userDeleteDTO, userLoginVO);
+		return CommonResponse.create(null, "删除成功");
+	}
 
 }

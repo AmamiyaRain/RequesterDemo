@@ -38,6 +38,7 @@ public enum BusinessErrorEnum implements CommonError {
 	CANNOT_DELETE_OWN_ACCOUNT(20011, "不能删除自己的帐号"),
 	TOKEN_GENERATE_FAILED(20012, "生成Token失败"),
 	TOKEN_VALIDATION_FAILED(20013, "Token验证失败"),
+	ROLE_NAME_CANNOT_BE_FIND(20014, "无法获取角色组名"),
 
 	/**
 	 * 验证相关 （3xx）

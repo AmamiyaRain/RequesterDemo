@@ -1,4 +1,4 @@
-package com.web.pojo.DAO;
+package com.web.pojo.DAO.user;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @EqualsAndHashCode
-public class FinalUserAccountDAO implements Serializable {
+public class UserDAO implements Serializable {
 
     /**
      * 主键自增id

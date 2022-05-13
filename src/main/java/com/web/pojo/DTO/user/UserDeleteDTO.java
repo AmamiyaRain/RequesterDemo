@@ -1,6 +1,7 @@
 package com.web.pojo.DTO.user;
 
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -10,5 +11,5 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class UserDeleteDTO {
 	@ApiModelProperty(value = "用户id", required = true)
-	private String userId;
+	private Integer userId;
 }

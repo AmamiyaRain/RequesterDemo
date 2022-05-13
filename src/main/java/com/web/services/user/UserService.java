@@ -1,7 +1,8 @@
-package com.web.service;
+package com.web.services.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.web.pojo.DAO.FinalUserAccountDAO;
+import com.web.pojo.DAO.user.UserDAO;
+import com.web.pojo.DTO.user.UserDeleteDTO;
 import com.web.pojo.DTO.user.UserLoginDTO;
 import com.web.pojo.DTO.user.UserModifyPasswordDTO;
 import com.web.pojo.DTO.user.UserRegisterDTO;
@@ -13,24 +14,24 @@ public interface UserService {
 
 	int deleteByPrimaryKey(Integer id);
 
-	int insert(FinalUserAccountDAO record);
+	int insert(UserDAO record);
 
-	int insertSelective(FinalUserAccountDAO record);
+	int insertSelective(UserDAO record);
 
-	FinalUserAccountDAO selectByPrimaryKey(Integer id);
+	UserDAO selectByPrimaryKey(Integer id);
 
-	int updateByPrimaryKeySelective(FinalUserAccountDAO record);
+	int updateByPrimaryKeySelective(UserDAO record);
 
-	int updateByPrimaryKey(FinalUserAccountDAO record);
+	int updateByPrimaryKey(UserDAO record);
 
 	void register(UserRegisterDTO userRegisterDTO);
 
 	UserTokenVO login(UserLoginDTO userLoginDTO);
 
-	UserTokenVO getLoginSuccessUserVO(FinalUserAccountDAO finalUserAccountDAO) throws JsonProcessingException;
+	UserTokenVO getLoginSuccessUserVO(UserDAO userDAO) throws JsonProcessingException;
 
 	void modifyPassword(UserModifyPasswordDTO userModifyPasswordDTO, UserLoginVO userLoginVO);
 
-
+	void deleteUser(UserDeleteDTO userDeleteDTO, UserLoginVO userLoginVO);
 
 }

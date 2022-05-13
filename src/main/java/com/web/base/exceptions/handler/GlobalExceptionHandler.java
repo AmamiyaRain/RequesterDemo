@@ -49,12 +49,12 @@ public class GlobalExceptionHandler {
 	 * 异常处理函数
 	 * 处理所有Controller类抛出的异常
 	 */
-	@ExceptionHandler(Exception.class)
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public Object handlerException(Exception ex) {
-		return CommonResponse.create(500, new Object(), "请求出现异常");
-	}
+//	@ExceptionHandler(Exception.class)
+//	@ResponseStatus(HttpStatus.OK)
+//	@ResponseBody
+//	public Object handlerException(Exception ex) {
+//		return CommonResponse.create(500, new Object(), "请求出现异常");
+//	}
 
 
 }

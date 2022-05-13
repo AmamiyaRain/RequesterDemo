@@ -67,7 +67,6 @@ public class TokenUtil {
 		try {
 			return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new BusinessException(BusinessErrorEnum.TOKEN_VALIDATION_FAILED);
 		}
 	}
@@ -137,7 +136,7 @@ public class TokenUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		throw new BusinessException(BusinessErrorEnum.LOGIN_OUT_DATED);
+		throw new BusinessException(BusinessErrorEnum.TOKEN_VALIDATION_FAILED);
 	}
 
 	public static <T> T getUserInfoFromHttpServletRequest(HttpServletRequest request, Class<T> cls) {
@@ -145,8 +144,12 @@ public class TokenUtil {
 		if (token == null) {
 			throw new BusinessException(BusinessErrorEnum.NOT_LOGGED_IN);
 		}
-		if (isExpired(token)) {
-			throw new BusinessException(BusinessErrorEnum.LOGIN_OUT_DATED);
+		try {
+			if (isExpired(token)) {
+				throw new BusinessException(BusinessErrorEnum.LOGIN_OUT_DATED);
+			}
+		} catch (Exception e) {
+			throw new BusinessException(BusinessErrorEnum.TOKEN_VALIDATION_FAILED);
 		}
 		return getUserInfoFromToken(token, cls);
 	}

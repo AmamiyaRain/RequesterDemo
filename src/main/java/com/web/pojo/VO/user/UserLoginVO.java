@@ -10,7 +10,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class UserLoginVO {
 	@ApiModelProperty(value = "用户id")
-	private String id;
+	private Integer id;
 
 	@ApiModelProperty(value = "用户名")
 	private String userName;
@@ -27,6 +27,9 @@ public class UserLoginVO {
 	@ApiModelProperty(value = "头像")
 	private String userAvatar;
 
-	@ApiModelProperty(value = "权限")
-	private String userRole;
+	@ApiModelProperty(value = "权限码")
+	private Integer userRole;
+
+	@ApiModelProperty(value = "登录状态")
+	private String userRoleName;
 }
