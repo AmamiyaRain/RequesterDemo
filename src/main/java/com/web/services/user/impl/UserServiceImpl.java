@@ -1,17 +1,21 @@
 package com.web.services.user.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.web.base.constants.PermissionConstant;
+import com.web.base.entity.PageResult;
 import com.web.base.enums.BusinessErrorEnum;
 import com.web.base.exceptions.BusinessException;
 import com.web.mapper.permission.PermissionMapper;
 import com.web.mapper.role.RoleMapper;
 import com.web.mapper.user.UserMapper;
 import com.web.pojo.DAO.user.UserDAO;
+import com.web.pojo.DTO.page.PageDTO;
 import com.web.pojo.DTO.user.UserDeleteDTO;
 import com.web.pojo.DTO.user.UserLoginDTO;
 import com.web.pojo.DTO.user.UserModifyPasswordDTO;
 import com.web.pojo.DTO.user.UserRegisterDTO;
-import com.web.pojo.VO.user.UserLoginVO;
+import com.web.pojo.VO.user.UserVO;
 import com.web.pojo.VO.user.UserTokenVO;
 import com.web.services.permission.PermissionService;
 import com.web.services.user.UserService;
@@ -23,6 +27,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -139,7 +145,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserTokenVO getLoginSuccessUserVO(UserDAO userDAO) {
 		// 创建用户视图模型
-		UserLoginVO userVO = new UserLoginVO();
+		UserVO userVO = new UserVO();
 		BeanUtils.copyProperties(userDAO, userVO);
 		// 创建用户登录成功视图模型
 		try {
@@ -157,10 +163,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void modifyPassword(UserModifyPasswordDTO userModifyPasswordDTO, UserLoginVO userLoginVO) {
+	public void modifyPassword(UserModifyPasswordDTO userModifyPasswordDTO, UserVO userVO) {
 		if (SyncUtil.start(userModifyPasswordDTO)) {
 			try {
-				UserDAO userDAO = userMapper.selectByUserName(userLoginVO.getUserName());
+				UserDAO userDAO = userMapper.selectByUserName(userVO.getUserName());
 				if (userDAO == null) {
 					throw new BusinessException(BusinessErrorEnum.USER_NOT_EXISTS);
 				}
@@ -194,13 +200,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void deleteUser(UserDeleteDTO userDeleteDTO, UserLoginVO userLoginVO) {
+	public void deleteUser(UserDeleteDTO userDeleteDTO, UserVO userVO) {
 		if (SyncUtil.start(userDeleteDTO)) {
 			try {
-				if (!permissionService.checkUserPermissionExists(userLoginVO, PermissionConstant.USER_MANAGEMENT)) {
+				if (!permissionService.checkUserPermissionExists(userVO, PermissionConstant.USER_MANAGEMENT)) {
 					throw new BusinessException(BusinessErrorEnum.PERMISSION_DENIED);
 				}
-				if (userDeleteDTO.getUserId().equals(userLoginVO.getId())) {
+				if (userDeleteDTO.getUserId().equals(userVO.getId())) {
 					throw new BusinessException(BusinessErrorEnum.CANNOT_DELETE_OWN_ACCOUNT);
 				}
 				UserDAO userDAO = userMapper.selectByPrimaryKey(userDeleteDTO.getUserId());
@@ -216,6 +222,33 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-
+	@Override
+	public PageResult<UserVO> getUserList(PageDTO pageDTO, UserVO userVO) {
+		if (SyncUtil.start(pageDTO)) {
+			try {
+				if (!permissionService.checkUserPermissionExists(userVO, PermissionConstant.USER_MANAGEMENT)) {
+					throw new BusinessException(BusinessErrorEnum.PERMISSION_DENIED);
+				}
+				try {
+					PageHelper.startPage(pageDTO.getPageIndex(), pageDTO.getPageSize());
+				} catch (Exception e) {
+					throw new BusinessException(BusinessErrorEnum.PAGE_PARAMETER_ERROR);
+				}List<UserDAO> userDAOList = userMapper.selectAll();
+				PageInfo<UserDAO> pageInfo= new PageInfo<>(userDAOList);
+				List<UserVO> userVOList = new ArrayList<>();
+				for (UserDAO userDAO : userDAOList) {
+					UserVO userVO1 = new UserVO();
+					BeanUtils.copyProperties(userDAO, userVO1);
+					userVO1.setUserRoleName(roleMapper.selectByPrimaryKey(userDAO.getUserRole()).getUserRoleName());
+					userVOList.add(userVO1);
+				}
+				return new PageResult<>(pageInfo.getTotal(), userVOList);
+			} finally {
+				SyncUtil.finish(pageDTO);
+			}
+		} else {
+			throw new BusinessException(BusinessErrorEnum.REQUEST_IS_HANDLING);
+		}
+	}
 }
 

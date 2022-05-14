@@ -5,7 +5,7 @@ import com.web.base.exceptions.BusinessException;
 import com.web.mapper.permission.PermissionMapper;
 import com.web.mapper.role.RoleMapper;
 import com.web.pojo.DAO.role.RoleDAO;
-import com.web.pojo.VO.user.UserLoginVO;
+import com.web.pojo.VO.user.UserVO;
 import com.web.services.permission.PermissionService;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +22,10 @@ public class PermissionServiceImpl implements PermissionService {
 	private PermissionMapper permissionMapper;
 
 	@Override
-	public boolean checkUserPermissionExists(UserLoginVO userLoginVO, BigInteger permissionCode) {
+	public boolean checkUserPermissionExists(UserVO userVO, BigInteger permissionCode) {
 		RoleDAO roleDAO;
 		try {
-			roleDAO = roleMapper.selectByPrimaryKey((userLoginVO.getUserRole()));
+			roleDAO = roleMapper.selectByPrimaryKey((userVO.getUserRole()));
 		} catch (Exception e) {
 			throw new BusinessException(BusinessErrorEnum.ROLE_NOT_EXISTS);
 		}

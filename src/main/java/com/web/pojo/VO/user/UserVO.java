@@ -8,7 +8,7 @@ import lombok.ToString;
 @Data
 @ToString
 @EqualsAndHashCode
-public class UserLoginVO {
+public class UserVO {
 	@ApiModelProperty(value = "用户id")
 	private Integer id;
 

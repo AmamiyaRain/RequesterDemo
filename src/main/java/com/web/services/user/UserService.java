@@ -1,12 +1,14 @@
 package com.web.services.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.web.base.entity.PageResult;
 import com.web.pojo.DAO.user.UserDAO;
+import com.web.pojo.DTO.page.PageDTO;
 import com.web.pojo.DTO.user.UserDeleteDTO;
 import com.web.pojo.DTO.user.UserLoginDTO;
 import com.web.pojo.DTO.user.UserModifyPasswordDTO;
 import com.web.pojo.DTO.user.UserRegisterDTO;
-import com.web.pojo.VO.user.UserLoginVO;
+import com.web.pojo.VO.user.UserVO;
 import com.web.pojo.VO.user.UserTokenVO;
 
 public interface UserService {
@@ -30,8 +32,9 @@ public interface UserService {
 
 	UserTokenVO getLoginSuccessUserVO(UserDAO userDAO) throws JsonProcessingException;
 
-	void modifyPassword(UserModifyPasswordDTO userModifyPasswordDTO, UserLoginVO userLoginVO);
+	void modifyPassword(UserModifyPasswordDTO userModifyPasswordDTO, UserVO userVO);
 
-	void deleteUser(UserDeleteDTO userDeleteDTO, UserLoginVO userLoginVO);
+	void deleteUser(UserDeleteDTO userDeleteDTO, UserVO userVO);
 
+	PageResult<UserVO> getUserList(PageDTO pageDTO, UserVO userVO);
 }

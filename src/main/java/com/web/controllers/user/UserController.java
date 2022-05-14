@@ -1,12 +1,15 @@
 package com.web.controllers.user;
 
+import com.github.pagehelper.PageInfo;
 import com.web.base.common.CommonResponse;
+import com.web.base.entity.PageResult;
 import com.web.pojo.DAO.user.UserDAO;
+import com.web.pojo.DTO.page.PageDTO;
 import com.web.pojo.DTO.user.UserDeleteDTO;
 import com.web.pojo.DTO.user.UserLoginDTO;
 import com.web.pojo.DTO.user.UserModifyPasswordDTO;
 import com.web.pojo.DTO.user.UserRegisterDTO;
-import com.web.pojo.VO.user.UserLoginVO;
+import com.web.pojo.VO.user.UserVO;
 import com.web.pojo.VO.user.UserTokenVO;
 import com.web.services.user.UserService;
 import com.web.util.security.TokenUtil;
@@ -72,17 +75,25 @@ public class UserController {
 	@PostMapping("/modifyPassword")
 	@ApiOperation(value = "修改密码", notes = "修改密码")
 	public CommonResponse<String> modifyPassword(@RequestBody UserModifyPasswordDTO userModifyPasswordDTO, HttpServletRequest request) {
-		UserLoginVO userLoginVO = TokenUtil.getUserInfoFromHttpServletRequest(request, UserLoginVO.class);
-		userService.modifyPassword(userModifyPasswordDTO, userLoginVO);
+		UserVO userVO = TokenUtil.getUserInfoFromHttpServletRequest(request, UserVO.class);
+		userService.modifyPassword(userModifyPasswordDTO, userVO);
 		return CommonResponse.create(null, "修改成功");
 	}
 
 	@PostMapping("/deleteUser")
 	@ApiOperation(value = "删除用户", notes = "删除用户")
 	public CommonResponse<String> deleteUser(@RequestBody UserDeleteDTO userDeleteDTO, HttpServletRequest request) {
-		UserLoginVO userLoginVO = TokenUtil.getUserInfoFromHttpServletRequest(request, UserLoginVO.class);
-		userService.deleteUser(userDeleteDTO, userLoginVO);
+		UserVO userVO = TokenUtil.getUserInfoFromHttpServletRequest(request, UserVO.class);
+		userService.deleteUser(userDeleteDTO, userVO);
 		return CommonResponse.create(null, "删除成功");
+	}
+
+	@PostMapping("/getAllUserInfo")
+	@ApiOperation(value = "获取所有用户信息", notes = "获取所有用户信息")
+	public CommonResponse<PageResult<UserVO>> getAllUserInfo(@RequestBody PageDTO pageDTO, HttpServletRequest request) {
+		UserVO userVO = TokenUtil.getUserInfoFromHttpServletRequest(request, UserVO.class);
+		PageResult<UserVO> pageInfo = userService.getUserList(pageDTO, userVO);
+		return CommonResponse.create(pageInfo, "获取成功");
 	}
 
 }

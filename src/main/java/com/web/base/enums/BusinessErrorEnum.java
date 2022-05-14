@@ -20,6 +20,7 @@ public enum BusinessErrorEnum implements CommonError {
 	REQUEST_IS_HANDLING(10008, "已有相似的请求正在处理，请稍后再试"),
 	MISSING_REQUIRED_PARAMETERS(10009, "缺少必要的参数"),
 	INSUFFICIENT_NUMBER_OF_PARAMETERS(10010, "参数数量不足"),
+	PAGE_PARAMETER_ERROR(10011, "分页参数错误"),
 
 
 	/**
