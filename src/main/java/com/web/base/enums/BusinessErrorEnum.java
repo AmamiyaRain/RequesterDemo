@@ -75,6 +75,8 @@ public enum BusinessErrorEnum implements CommonError {
 	 */
 	THE_FILE_IS_DAMAGED(70001, "文件损坏"),
 	UNRECOGNIZED_FILE_TYPE(70002, "文件类型无法识别"),
+	WRONG_FILE_TYPE(70003,"文件格式错误，仅支持jpg、png、gif和bmp类型的图片文件"),
+	UPLOAD_IMAGE_ERROR(70004,"文件上传失败"),
 
 	/**
 	 * 敏感操作相关 （8xx）

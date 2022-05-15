@@ -16,6 +16,7 @@ import com.web.util.security.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -60,8 +61,8 @@ public class UserController {
 
 	@PostMapping("/register")
 	@ApiOperation(value = "注册用户", notes = "注册用户")
-	public CommonResponse<String> register(@RequestBody UserRegisterDTO userRegisterDTO, HttpServletRequest request) {
-		userService.register(userRegisterDTO);
+	public CommonResponse<String> register(@RequestParam(required = false)MultipartFile userAvatar,@RequestBody UserRegisterDTO userRegisterDTO, HttpServletRequest request) {
+		userService.register(userAvatar,userRegisterDTO);
 		return CommonResponse.create(null, "注册成功");
 	}
 

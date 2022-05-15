@@ -17,6 +17,7 @@ import com.web.pojo.DTO.user.UserModifyPasswordDTO;
 import com.web.pojo.DTO.user.UserRegisterDTO;
 import com.web.pojo.VO.user.UserVO;
 import com.web.pojo.VO.user.UserTokenVO;
+import com.web.services.oss.OssService;
 import com.web.services.permission.PermissionService;
 import com.web.services.user.UserService;
 import com.web.util.security.SecurityUtil;
@@ -25,6 +26,7 @@ import com.web.util.security.TokenUtil;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -33,6 +35,8 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
+	@Resource
+	private OssService ossService;
 
 	@Resource
 	private UserMapper userMapper;
@@ -77,7 +81,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void register(UserRegisterDTO userRegisterDTO) {
+	public void register(MultipartFile userAvatar, UserRegisterDTO userRegisterDTO) {
 		if (SyncUtil.start(userRegisterDTO)) {
 			try {
 				if (userRegisterDTO.getUserTel() == null || Strings.isEmpty(userRegisterDTO.getUserPassword()) || Strings.isEmpty(userRegisterDTO.getUserName())
@@ -96,13 +100,16 @@ public class UserServiceImpl implements UserService {
 					throw new BusinessException(BusinessErrorEnum.REGISTER_FAILED);
 				}
 				UserDAO userDAO = new UserDAO();
+				if (userAvatar != null) {
+					String userAvatarUrl = ossService.uploadImage(userAvatar);
+					userDAO.setUserAvatar(userAvatarUrl);
+				}
 				try {
 					userDAO.setUserName(userRegisterDTO.getUserName());
 					userDAO.setUserPassword(encPassword);
 					userDAO.setUserTel(userRegisterDTO.getUserTel());
 					userDAO.setUserSalt(salt);
 					userDAO.setUserRole(1);
-					userDAO.setUserAvatar("我头像呢?我头像呢?我头像呢?");
 					userMapper.insert(userDAO);
 				} catch (Exception e) {
 					throw new BusinessException(BusinessErrorEnum.REGISTER_FAILED);
@@ -233,8 +240,9 @@ public class UserServiceImpl implements UserService {
 					PageHelper.startPage(pageDTO.getPageIndex(), pageDTO.getPageSize());
 				} catch (Exception e) {
 					throw new BusinessException(BusinessErrorEnum.PAGE_PARAMETER_ERROR);
-				}List<UserDAO> userDAOList = userMapper.selectAll();
-				PageInfo<UserDAO> pageInfo= new PageInfo<>(userDAOList);
+				}
+				List<UserDAO> userDAOList = userMapper.selectAll();
+				PageInfo<UserDAO> pageInfo = new PageInfo<>(userDAOList);
 				List<UserVO> userVOList = new ArrayList<>();
 				for (UserDAO userDAO : userDAOList) {
 					UserVO userVO1 = new UserVO();

@@ -37,4 +37,6 @@
     <bean id="swagger2Config" class="com.web.swagger.config.Swagger2Config"/>
     <!--	ExceptionHandler-->
     <bean id="exceptionHandler" class="com.web.base.exceptions.handler.GlobalExceptionHandler"/>
+    <bean id="ossConfig" class="com.web.configs.aliyun.AliYunOSSConfig"/>
+
 </beans>
