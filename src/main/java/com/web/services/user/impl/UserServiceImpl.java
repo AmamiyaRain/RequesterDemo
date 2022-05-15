@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
 				userDAO.setUserTel(userRegisterDTO.getUserTel());
 				userDAO.setUserSalt(salt);
 				userDAO.setUserRole(1);
-				userDAO.setUserAvatar(userRegisterDTO.getUserName()+ new Date().getTime() );
+				userDAO.setUserAvatar(null);
 				userMapper.insert(userDAO);
 			} catch (Exception e) {
 				throw new BusinessException(BusinessErrorEnum.REGISTER_FAILED);
