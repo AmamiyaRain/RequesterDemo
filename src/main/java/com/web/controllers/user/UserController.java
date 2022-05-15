@@ -8,6 +8,7 @@ import com.web.pojo.DTO.user.UserDeleteDTO;
 import com.web.pojo.DTO.user.UserLoginDTO;
 import com.web.pojo.DTO.user.UserModifyPasswordDTO;
 import com.web.pojo.DTO.user.UserRegisterDTO;
+import com.web.pojo.VO.user.UserAvatarVO;
 import com.web.pojo.VO.user.UserTokenVO;
 import com.web.pojo.VO.user.UserVO;
 import com.web.services.user.UserService;
@@ -60,9 +61,9 @@ public class UserController {
 
 	@PostMapping("/register")
 	@ApiOperation(value = "注册用户", notes = "注册用户")
-	public CommonResponse<String> register(@RequestParam(required = false) MultipartFile userAvatar, UserRegisterDTO userRegisterDTO) {
-		userService.register(userAvatar, userRegisterDTO);
-		return CommonResponse.create(null, "注册成功");
+	public CommonResponse<UserAvatarVO> register(@RequestPart(required = false) MultipartFile userAvatar, UserRegisterDTO userRegisterDTO) {
+		UserAvatarVO userAvatarVO = userService.register(userAvatar, userRegisterDTO);
+		return CommonResponse.create(userAvatarVO, "注册成功");
 	}
 
 	@PostMapping("/login")

@@ -8,6 +8,7 @@ import com.web.pojo.DTO.user.UserDeleteDTO;
 import com.web.pojo.DTO.user.UserLoginDTO;
 import com.web.pojo.DTO.user.UserModifyPasswordDTO;
 import com.web.pojo.DTO.user.UserRegisterDTO;
+import com.web.pojo.VO.user.UserAvatarVO;
 import com.web.pojo.VO.user.UserVO;
 import com.web.pojo.VO.user.UserTokenVO;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +28,7 @@ public interface UserService {
 
 	int updateByPrimaryKey(UserDAO record);
 
-	void register(MultipartFile userAvatar,UserRegisterDTO userRegisterDTO);
+	UserAvatarVO register(MultipartFile userAvatar, UserRegisterDTO userRegisterDTO);
 
 	UserTokenVO login(UserLoginDTO userLoginDTO);
 

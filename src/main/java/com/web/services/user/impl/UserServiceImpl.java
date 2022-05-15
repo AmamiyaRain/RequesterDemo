@@ -15,6 +15,7 @@ import com.web.pojo.DTO.user.UserDeleteDTO;
 import com.web.pojo.DTO.user.UserLoginDTO;
 import com.web.pojo.DTO.user.UserModifyPasswordDTO;
 import com.web.pojo.DTO.user.UserRegisterDTO;
+import com.web.pojo.VO.user.UserAvatarVO;
 import com.web.pojo.VO.user.UserVO;
 import com.web.pojo.VO.user.UserTokenVO;
 import com.web.services.oss.OssService;
@@ -81,42 +82,42 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void register(MultipartFile userAvatar, UserRegisterDTO userRegisterDTO) {
+	public UserAvatarVO register(MultipartFile userAvatar, UserRegisterDTO userRegisterDTO) {
 		if (SyncUtil.start(userRegisterDTO)) {
-			try {
-				if (userRegisterDTO.getUserTel() == null || Strings.isEmpty(userRegisterDTO.getUserPassword()) || Strings.isEmpty(userRegisterDTO.getUserName())
-				) {
-					throw new BusinessException(BusinessErrorEnum.MISSING_REQUIRED_PARAMETERS);
-				}
-
-				if (userMapper.selectByUserName(userRegisterDTO.getUserName()) != null) {
-					throw new BusinessException(BusinessErrorEnum.USER_ALREADY_EXISTS);
-				}
-				String salt = SecurityUtil.getDefaultLengthSalt();
-				String encPassword;
-				try {
-					encPassword = SecurityUtil.getMd5(userRegisterDTO.getUserPassword(), salt);
-				} catch (Exception e) {
-					throw new BusinessException(BusinessErrorEnum.REGISTER_FAILED);
-				}
-				UserDAO userDAO = new UserDAO();
-				if (userAvatar != null) {
-					String userAvatarUrl = ossService.uploadImage(userAvatar);
-					userDAO.setUserAvatar(userAvatarUrl);
-				}
-				try {
-					userDAO.setUserName(userRegisterDTO.getUserName());
-					userDAO.setUserPassword(encPassword);
-					userDAO.setUserTel(userRegisterDTO.getUserTel());
-					userDAO.setUserSalt(salt);
-					userDAO.setUserRole(1);
-					userMapper.insert(userDAO);
-				} catch (Exception e) {
-					throw new BusinessException(BusinessErrorEnum.REGISTER_FAILED);
-				}
-			} finally {
-				SyncUtil.finish(userRegisterDTO);
+			if (userRegisterDTO.getUserTel() == null || Strings.isEmpty(userRegisterDTO.getUserPassword()) || Strings.isEmpty(userRegisterDTO.getUserName())
+			) {
+				throw new BusinessException(BusinessErrorEnum.MISSING_REQUIRED_PARAMETERS);
 			}
+			if (userMapper.selectByUserName(userRegisterDTO.getUserName()) != null) {
+				throw new BusinessException(BusinessErrorEnum.USER_ALREADY_EXISTS);
+			}
+			String salt = SecurityUtil.getDefaultLengthSalt();
+			String encPassword;
+			try {
+				encPassword = SecurityUtil.getMd5(userRegisterDTO.getUserPassword(), salt);
+			} catch (Exception e) {
+				throw new BusinessException(BusinessErrorEnum.REGISTER_FAILED);
+			}
+			UserDAO userDAO = new UserDAO();
+			String userAvatarUrl = null;
+			if (userAvatar != null) {
+				userAvatarUrl = ossService.uploadImage(userAvatar);
+				userDAO.setUserAvatar(userAvatarUrl);
+			}
+			try {
+				userDAO.setUserName(userRegisterDTO.getUserName());
+				userDAO.setUserPassword(encPassword);
+				userDAO.setUserTel(userRegisterDTO.getUserTel());
+				userDAO.setUserSalt(salt);
+				userDAO.setUserRole(1);
+				userMapper.insert(userDAO);
+			} catch (Exception e) {
+				throw new BusinessException(BusinessErrorEnum.REGISTER_FAILED);
+			}
+			SyncUtil.finish(userRegisterDTO);
+			UserAvatarVO userAvatarVO = new UserAvatarVO();
+			userAvatarVO.setAvatarUrl(userAvatarUrl);
+			return userAvatarVO;
 		} else {
 			throw new BusinessException(BusinessErrorEnum.REQUEST_IS_HANDLING);
 		}
