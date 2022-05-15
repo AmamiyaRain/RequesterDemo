@@ -38,5 +38,7 @@ public interface UserService {
 
 	void deleteUser(UserDeleteDTO userDeleteDTO, UserVO userVO);
 
+	UserTokenVO modifyAvatar(MultipartFile userAvatar, UserVO userVO);
+
 	PageResult<UserVO> getUserList(PageDTO pageDTO, UserVO userVO);
 }

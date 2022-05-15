@@ -66,6 +66,14 @@ public class UserController {
 		return CommonResponse.create(userAvatarVO, "注册成功");
 	}
 
+	@PostMapping("/modifyAvatar")
+	@ApiOperation(value = "修改头像", notes = "修改头像")
+	public CommonResponse<UserTokenVO> modifyAvatar(@RequestPart() MultipartFile userAvatar, HttpServletRequest request) {
+		UserVO userVO = TokenUtil.getUserInfoFromHttpServletRequest(request, UserVO.class);
+		UserTokenVO userTokenVO = userService.modifyAvatar(userAvatar, userVO);
+		return CommonResponse.create(userTokenVO, "修改成功");
+	}
+
 	@PostMapping("/login")
 	@ApiOperation(value = "登录用户", notes = "登录用户")
 	public CommonResponse<UserTokenVO> login(@RequestBody UserLoginDTO userLoginDTO) {

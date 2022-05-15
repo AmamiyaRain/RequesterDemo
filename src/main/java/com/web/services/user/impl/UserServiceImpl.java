@@ -124,6 +124,27 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public UserTokenVO modifyAvatar(MultipartFile userAvatar, UserVO userVO) {
+		if (SyncUtil.start(userAvatar + "-" + userVO)) {
+			String userAvatarUrl;
+			if (userAvatar != null) {
+				userAvatarUrl = ossService.uploadImage(userAvatar);
+				UserDAO userDAO = userMapper.selectByUserName(userVO.getUserName());
+				userDAO.setUserAvatar(userAvatarUrl);
+				BeanUtils.copyProperties(userDAO, userVO);
+				userMapper.updateByPrimaryKeySelective(userDAO);
+				SyncUtil.finish(userAvatar + "-" + userVO);
+				return getLoginSuccessUserVO(userDAO);
+			}
+			SyncUtil.finish(null + "-" + userVO);
+			throw new BusinessException(BusinessErrorEnum.MISSING_REQUIRED_PARAMETERS);
+
+		} else {
+			throw new BusinessException(BusinessErrorEnum.REQUEST_IS_HANDLING);
+		}
+	}
+
+	@Override
 	public UserTokenVO login(UserLoginDTO userLoginDTO) {
 		if (SyncUtil.start(userLoginDTO)) {
 			if (Strings.isEmpty(userLoginDTO.getUserName()) || Strings.isEmpty(userLoginDTO.getUserPassword())) {
@@ -217,7 +238,12 @@ public class UserServiceImpl implements UserService {
 				if (userDeleteDTO.getUserId().equals(userVO.getId())) {
 					throw new BusinessException(BusinessErrorEnum.CANNOT_DELETE_OWN_ACCOUNT);
 				}
-				UserDAO userDAO = userMapper.selectByPrimaryKey(userDeleteDTO.getUserId());
+				UserDAO userDAO = null;
+				try {
+					userDAO = userMapper.selectByPrimaryKey(userDeleteDTO.getUserId());
+				} catch (Exception e) {
+					throw new BusinessException(BusinessErrorEnum.USER_NOT_EXISTS);
+				}
 				if (userDAO == null) {
 					throw new BusinessException(BusinessErrorEnum.USER_NOT_EXISTS);
 				}
