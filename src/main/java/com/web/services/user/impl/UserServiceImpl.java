@@ -31,7 +31,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -82,7 +84,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserAvatarVO register(MultipartFile userAvatar, UserRegisterDTO userRegisterDTO) {
+	public void register(UserRegisterDTO userRegisterDTO) {
 		if (SyncUtil.start(userRegisterDTO)) {
 			if (userRegisterDTO.getUserTel() == null || Strings.isEmpty(userRegisterDTO.getUserPassword()) || Strings.isEmpty(userRegisterDTO.getUserName())
 			) {
@@ -99,25 +101,18 @@ public class UserServiceImpl implements UserService {
 				throw new BusinessException(BusinessErrorEnum.REGISTER_FAILED);
 			}
 			UserDAO userDAO = new UserDAO();
-			String userAvatarUrl = null;
-			if (userAvatar != null) {
-				userAvatarUrl = ossService.uploadImage(userAvatar);
-				userDAO.setUserAvatar(userAvatarUrl);
-			}
 			try {
 				userDAO.setUserName(userRegisterDTO.getUserName());
 				userDAO.setUserPassword(encPassword);
 				userDAO.setUserTel(userRegisterDTO.getUserTel());
 				userDAO.setUserSalt(salt);
 				userDAO.setUserRole(1);
+				userDAO.setUserAvatar(userRegisterDTO.getUserName()+ new Date().getTime() );
 				userMapper.insert(userDAO);
 			} catch (Exception e) {
 				throw new BusinessException(BusinessErrorEnum.REGISTER_FAILED);
 			}
 			SyncUtil.finish(userRegisterDTO);
-			UserAvatarVO userAvatarVO = new UserAvatarVO();
-			userAvatarVO.setAvatarUrl(userAvatarUrl);
-			return userAvatarVO;
 		} else {
 			throw new BusinessException(BusinessErrorEnum.REQUEST_IS_HANDLING);
 		}

@@ -28,7 +28,7 @@ public interface UserService {
 
 	int updateByPrimaryKey(UserDAO record);
 
-	UserAvatarVO register(MultipartFile userAvatar, UserRegisterDTO userRegisterDTO);
+	void register( UserRegisterDTO userRegisterDTO);
 
 	UserTokenVO login(UserLoginDTO userLoginDTO);
 

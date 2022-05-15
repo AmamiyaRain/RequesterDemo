@@ -61,9 +61,9 @@ public class UserController {
 
 	@PostMapping("/register")
 	@ApiOperation(value = "注册用户", notes = "注册用户")
-	public CommonResponse<UserAvatarVO> register(@RequestPart(required = false) MultipartFile userAvatar, UserRegisterDTO userRegisterDTO) {
-		UserAvatarVO userAvatarVO = userService.register(userAvatar, userRegisterDTO);
-		return CommonResponse.create(userAvatarVO, "注册成功");
+	public CommonResponse<UserAvatarVO> register(@RequestBody UserRegisterDTO userRegisterDTO) {
+		userService.register(userRegisterDTO);
+		return CommonResponse.create(null, "注册成功");
 	}
 
 	@PostMapping("/modifyAvatar")

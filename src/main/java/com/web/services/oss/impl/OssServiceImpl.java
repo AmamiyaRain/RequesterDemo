@@ -74,7 +74,7 @@ public class OssServiceImpl implements OssService {
 		try {
 			byte[] bytes = new byte[5];
 			//noinspection ResultOfMethodCallIgnored
-			imageFile.getInputStream().read(bytes, 0, 5);
+			imageFile.getInputStream().read(bytes);
 			String byteHex = byteToHex(bytes).toUpperCase(Locale.ROOT);
 			if (byteHex.startsWith(FileTypeEnum.JPG.getStart())) {
 				imageFileSuffix = ".jpg";
