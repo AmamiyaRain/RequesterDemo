@@ -1,6 +1,5 @@
 package com.web.controllers.user;
 
-import com.github.pagehelper.PageInfo;
 import com.web.base.common.CommonResponse;
 import com.web.base.entity.PageResult;
 import com.web.pojo.DAO.user.UserDAO;
@@ -9,8 +8,8 @@ import com.web.pojo.DTO.user.UserDeleteDTO;
 import com.web.pojo.DTO.user.UserLoginDTO;
 import com.web.pojo.DTO.user.UserModifyPasswordDTO;
 import com.web.pojo.DTO.user.UserRegisterDTO;
-import com.web.pojo.VO.user.UserVO;
 import com.web.pojo.VO.user.UserTokenVO;
+import com.web.pojo.VO.user.UserVO;
 import com.web.services.user.UserService;
 import com.web.util.security.TokenUtil;
 import io.swagger.annotations.Api;
@@ -61,14 +60,14 @@ public class UserController {
 
 	@PostMapping("/register")
 	@ApiOperation(value = "注册用户", notes = "注册用户")
-	public CommonResponse<String> register(@RequestParam(required = false)MultipartFile userAvatar,@RequestBody UserRegisterDTO userRegisterDTO, HttpServletRequest request) {
-		userService.register(userAvatar,userRegisterDTO);
+	public CommonResponse<String> register(@RequestParam(required = false) MultipartFile userAvatar, UserRegisterDTO userRegisterDTO) {
+		userService.register(userAvatar, userRegisterDTO);
 		return CommonResponse.create(null, "注册成功");
 	}
 
 	@PostMapping("/login")
 	@ApiOperation(value = "登录用户", notes = "登录用户")
-	public CommonResponse<UserTokenVO> login(@RequestBody UserLoginDTO userLoginDTO, HttpServletRequest request) {
+	public CommonResponse<UserTokenVO> login(@RequestBody UserLoginDTO userLoginDTO) {
 		UserTokenVO userTokenVO = userService.login(userLoginDTO);
 		return CommonResponse.create(userTokenVO, "登录成功");
 	}
