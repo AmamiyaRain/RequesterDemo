@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.web.base.entity.PageResult;
 import com.web.pojo.DAO.user.UserDAO;
 import com.web.pojo.DTO.page.PageDTO;
+import com.web.pojo.DTO.sms.SendMessageDTO;
 import com.web.pojo.DTO.user.UserDeleteDTO;
 import com.web.pojo.DTO.user.UserLoginDTO;
 import com.web.pojo.DTO.user.UserModifyPasswordDTO;
@@ -41,4 +42,6 @@ public interface UserService {
 	UserTokenVO modifyAvatar(MultipartFile userAvatar, UserVO userVO);
 
 	PageResult<UserVO> getUserList(PageDTO pageDTO, UserVO userVO);
+
+	void userBindingTel(SendMessageDTO sendMessageDTO,UserVO userVO);
 }

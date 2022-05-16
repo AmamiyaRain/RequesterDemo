@@ -7,7 +7,7 @@ import lombok.ToString;
 @Data
 @ToString
 @EqualsAndHashCode
-public class CaptchaRequest {
+public class CaptchaRequestEntity {
 
 	private String id="62810fa4a36b69b0b7227405";
 

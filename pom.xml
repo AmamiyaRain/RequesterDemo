@@ -187,7 +187,7 @@
             <artifactId>commons-collections4</artifactId>
             <version>4.4</version>
         </dependency>
-        <!--修复java版本过低导致的缺包问题 -->
+        <!--修复java版本过高导致的缺包问题 -->
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>

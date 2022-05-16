@@ -1,6 +1,5 @@
 package com.web.base.entity;
 
-import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -8,7 +7,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @Data
-public class CaptchaResult {
+public class CaptchaResultEntity {
 	private Integer success;
 
 	private Integer score;

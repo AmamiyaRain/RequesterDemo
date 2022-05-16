@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.web.base.constants.PermissionConstant;
 import com.web.base.entity.PageResult;
+import com.web.base.entity.SMSEntity;
 import com.web.base.enums.BusinessErrorEnum;
 import com.web.base.exceptions.BusinessException;
 import com.web.mapper.permission.PermissionMapper;
@@ -11,6 +12,7 @@ import com.web.mapper.role.RoleMapper;
 import com.web.mapper.user.UserMapper;
 import com.web.pojo.DAO.user.UserDAO;
 import com.web.pojo.DTO.page.PageDTO;
+import com.web.pojo.DTO.sms.SendMessageDTO;
 import com.web.pojo.DTO.user.UserDeleteDTO;
 import com.web.pojo.DTO.user.UserLoginDTO;
 import com.web.pojo.DTO.user.UserModifyPasswordDTO;
@@ -19,6 +21,7 @@ import com.web.pojo.VO.user.UserVO;
 import com.web.pojo.VO.user.UserTokenVO;
 import com.web.services.oss.OssService;
 import com.web.services.permission.PermissionService;
+import com.web.services.sms.SMSService;
 import com.web.services.user.UserService;
 import com.web.util.security.SecurityUtil;
 import com.web.util.security.SyncUtil;
@@ -49,6 +52,9 @@ public class UserServiceImpl implements UserService {
 
 	@Resource
 	private PermissionService permissionService;
+
+	@Resource
+	private SMSService smsService;
 
 	@Override
 	public int deleteByPrimaryKey(Integer id) {
@@ -276,6 +282,14 @@ public class UserServiceImpl implements UserService {
 		} else {
 			throw new BusinessException(BusinessErrorEnum.REQUEST_IS_HANDLING);
 		}
+	}
+
+	@Override
+	public void userBindingTel(SendMessageDTO sendMessageDTO, UserVO userVO) {
+		SMSEntity smsEntity = new SMSEntity();
+		smsEntity.setToken(sendMessageDTO.getToken());
+		smsEntity.setPhone(sendMessageDTO.getUserTel());
+		smsService.sendSMS(smsEntity);
 	}
 }
 

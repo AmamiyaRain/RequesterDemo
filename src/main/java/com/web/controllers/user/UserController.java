@@ -2,11 +2,12 @@ package com.web.controllers.user;
 
 import com.alibaba.fastjson.JSONObject;
 import com.web.base.common.CommonResponse;
-import com.web.base.entity.CaptchaRequest;
-import com.web.base.entity.CaptchaResult;
+import com.web.base.entity.CaptchaRequestEntity;
+import com.web.base.entity.CaptchaResultEntity;
 import com.web.base.entity.PageResult;
 import com.web.pojo.DAO.user.UserDAO;
 import com.web.pojo.DTO.page.PageDTO;
+import com.web.pojo.DTO.sms.SendMessageDTO;
 import com.web.pojo.DTO.user.UserDeleteDTO;
 import com.web.pojo.DTO.user.UserLoginDTO;
 import com.web.pojo.DTO.user.UserModifyPasswordDTO;
@@ -15,6 +16,7 @@ import com.web.pojo.VO.user.UserAvatarVO;
 import com.web.pojo.VO.user.UserTokenVO;
 import com.web.pojo.VO.user.UserVO;
 import com.web.services.captcha.CaptchaService;
+import com.web.services.sms.SMSService;
 import com.web.services.user.UserService;
 import com.web.util.security.TokenUtil;
 import io.swagger.annotations.Api;
@@ -84,12 +86,13 @@ public class UserController {
 	@PostMapping("/login")
 	@ApiOperation(value = "登录用户", notes = "登录用户")
 	public CommonResponse<UserTokenVO> login(@RequestBody UserLoginDTO userLoginDTO, HttpServletRequest request) {
-		CaptchaRequest captchaRequest = new CaptchaRequest();
-		captchaRequest.setIp(request.getRemoteAddr());
-		captchaRequest.setToken(userLoginDTO.getToken());
-		JSONObject response = captchaService.getCaptchaValidationResult(userLoginDTO.getServer(), captchaRequest);
-		CaptchaResult captchaResult = JSONObject.parseObject(response.toJSONString(), CaptchaResult.class);
-		if (captchaResult.getSuccess() != 1 || captchaResult.getScore() < 60) {
+		CaptchaRequestEntity captchaRequestEntity = new CaptchaRequestEntity();
+		captchaRequestEntity.setIp(request.getRemoteAddr());
+		captchaRequestEntity.setToken(userLoginDTO.getToken());
+		JSONObject response = captchaService.getCaptchaValidationResult(userLoginDTO.getServer(), captchaRequestEntity);
+		CaptchaResultEntity captchaResultEntity = JSONObject.parseObject(response.toJSONString(), CaptchaResultEntity.class);
+		System.out.println(captchaResultEntity);
+		if (captchaResultEntity.getSuccess() != 1 || captchaResultEntity.getScore() < 60) {
 			return CommonResponse.create(null, "验证失败");
 		}
 		UserTokenVO userTokenVO = userService.login(userLoginDTO);
@@ -118,6 +121,14 @@ public class UserController {
 		UserVO userVO = TokenUtil.getUserInfoFromHttpServletRequest(request, UserVO.class);
 		PageResult<UserVO> pageInfo = userService.getUserList(pageDTO, userVO);
 		return CommonResponse.create(pageInfo, "获取成功");
+	}
+
+	@PostMapping("/sendMessage")
+	@ApiOperation(value="发送短信",notes = "发送短信")
+	public CommonResponse<String> sendMessage(@RequestBody SendMessageDTO sendMessageDTO,HttpServletRequest request){
+		UserVO userVO = TokenUtil.getUserInfoFromHttpServletRequest(request, UserVO.class);
+		userService.userBindingTel(sendMessageDTO,userVO);
+		return CommonResponse.create(null, "获取成功");
 	}
 
 }

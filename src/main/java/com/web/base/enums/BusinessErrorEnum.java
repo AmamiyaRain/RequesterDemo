@@ -82,8 +82,12 @@ public enum BusinessErrorEnum implements CommonError {
 	 * 敏感操作相关 （8xx）
 	 */
 	OPERATION_REQUEST_NOT_EXISTS(80001, "目标操作请求不存在"),
-	VALID_OPERATION_REQUEST_NOT_EXISTS(80002, "无有效操作请求，请先申请");
+	VALID_OPERATION_REQUEST_NOT_EXISTS(80002, "无有效操作请求，请先申请"),
 
+	/**
+	 * 网络相关（9xx）
+	 */
+	CONNECTION_REQUEST_FAILED(90001,"建立连接失败");
 
 	private final int errCode;
 
