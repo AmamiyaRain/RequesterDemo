@@ -1,6 +1,9 @@
 package com.web.controllers.user;
 
+import com.alibaba.fastjson.JSONObject;
 import com.web.base.common.CommonResponse;
+import com.web.base.entity.CaptchaRequest;
+import com.web.base.entity.CaptchaResult;
 import com.web.base.entity.PageResult;
 import com.web.pojo.DAO.user.UserDAO;
 import com.web.pojo.DTO.page.PageDTO;
@@ -11,6 +14,7 @@ import com.web.pojo.DTO.user.UserRegisterDTO;
 import com.web.pojo.VO.user.UserAvatarVO;
 import com.web.pojo.VO.user.UserTokenVO;
 import com.web.pojo.VO.user.UserVO;
+import com.web.services.captcha.CaptchaService;
 import com.web.services.user.UserService;
 import com.web.util.security.TokenUtil;
 import io.swagger.annotations.Api;
@@ -34,9 +38,12 @@ public class UserController {
 
 	private final UserService userService;
 
-	public UserController(UserService userService) {
+	public UserController(UserService userService, CaptchaService captchaService) {
 		this.userService = userService;
+		this.captchaService = captchaService;
 	}
+
+	private final CaptchaService captchaService;
 
 	/**
 	 * 根据用户id查询用户信息
@@ -76,7 +83,15 @@ public class UserController {
 
 	@PostMapping("/login")
 	@ApiOperation(value = "登录用户", notes = "登录用户")
-	public CommonResponse<UserTokenVO> login(@RequestBody UserLoginDTO userLoginDTO) {
+	public CommonResponse<UserTokenVO> login(@RequestBody UserLoginDTO userLoginDTO, HttpServletRequest request) {
+		CaptchaRequest captchaRequest = new CaptchaRequest();
+		captchaRequest.setIp(request.getRemoteAddr());
+		captchaRequest.setToken(userLoginDTO.getToken());
+		JSONObject response = captchaService.getCaptchaValidationResult(userLoginDTO.getServer(), captchaRequest);
+		CaptchaResult captchaResult = JSONObject.parseObject(response.toJSONString(), CaptchaResult.class);
+		if (captchaResult.getSuccess() != 1 || captchaResult.getScore() < 60) {
+			return CommonResponse.create(null, "验证失败");
+		}
 		UserTokenVO userTokenVO = userService.login(userLoginDTO);
 		return CommonResponse.create(userTokenVO, "登录成功");
 	}

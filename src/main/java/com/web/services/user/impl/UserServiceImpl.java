@@ -15,7 +15,6 @@ import com.web.pojo.DTO.user.UserDeleteDTO;
 import com.web.pojo.DTO.user.UserLoginDTO;
 import com.web.pojo.DTO.user.UserModifyPasswordDTO;
 import com.web.pojo.DTO.user.UserRegisterDTO;
-import com.web.pojo.VO.user.UserAvatarVO;
 import com.web.pojo.VO.user.UserVO;
 import com.web.pojo.VO.user.UserTokenVO;
 import com.web.services.oss.OssService;
@@ -31,9 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -194,23 +191,23 @@ public class UserServiceImpl implements UserService {
 				if (userDAO == null) {
 					throw new BusinessException(BusinessErrorEnum.USER_NOT_EXISTS);
 				}
-				if (Strings.isEmpty(userModifyPasswordDTO.getUserName()) || Strings.isEmpty(userModifyPasswordDTO.getUserPassword()) || Strings.isEmpty(userModifyPasswordDTO.getUpdatedUserPassword())) {
+				if (Strings.isEmpty(userModifyPasswordDTO.getOldPassword()) || Strings.isEmpty(userModifyPasswordDTO.getNewPassword())) {
 					throw new BusinessException(BusinessErrorEnum.MISSING_REQUIRED_PARAMETERS);
 				}
 				String oldPassword;
 				try {
-					oldPassword = SecurityUtil.getMd5(userDAO.getUserPassword(), userDAO.getUserSalt());
+					oldPassword = SecurityUtil.getMd5(userModifyPasswordDTO.getOldPassword(), userDAO.getUserSalt());
 				} catch (Exception e) {
 					throw new BusinessException(BusinessErrorEnum.CHECK_OLD_PASSWORD_FAILED);
 				}
-				if (!oldPassword.equals(userModifyPasswordDTO.getUserPassword())) {
+				if (!oldPassword.equals(userDAO.getUserPassword())) {
 					throw new BusinessException(BusinessErrorEnum.CHECK_OLD_PASSWORD_FAILED);
 				}
-				if (userModifyPasswordDTO.getUserPassword().equals(userModifyPasswordDTO.getUpdatedUserPassword())) {
+				if (userModifyPasswordDTO.getOldPassword().equals(userModifyPasswordDTO.getNewPassword())) {
 					throw new BusinessException(BusinessErrorEnum.PASSWORD_IS_SAME);
 				}
 				try {
-					userDAO.setUserPassword(SecurityUtil.getMd5(userModifyPasswordDTO.getUpdatedUserPassword(), userDAO.getUserSalt()));
+					userDAO.setUserPassword(SecurityUtil.getMd5(userModifyPasswordDTO.getNewPassword(), userDAO.getUserSalt()));
 					userMapper.updateByPrimaryKey(userDAO);
 				} catch (Exception e) {
 					throw new BusinessException(BusinessErrorEnum.FAILED_TO_MODIFY_PASSWORD);

@@ -143,7 +143,10 @@ public class TokenUtil {
 		String token = request.getHeader(getTokenHeader());
 		if (token == null) {
 			throw new BusinessException(BusinessErrorEnum.NOT_LOGGED_IN);
+		} else {
+			token = token.substring(7);
 		}
+		System.out.println(token);
 		try {
 			if (isExpired(token)) {
 				throw new BusinessException(BusinessErrorEnum.LOGIN_OUT_DATED);
