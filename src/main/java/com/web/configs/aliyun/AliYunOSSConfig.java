@@ -11,13 +11,13 @@ import org.springframework.context.annotation.Bean;
 @ToString
 @EqualsAndHashCode
 public class AliYunOSSConfig {
-	private final String endpoint = "oss-cn-shanghai.aliyuncs.com";
+	private final String endpoint = "urAliYunOSSConfig.endpoint";
 
-	private final String accessKeyId= "LTAI5tSC7R8RYRAhtPAdsoQC";
+	private final String accessKeyId= "urAliYunOSSConfig.accessKeyId";
 
-	private final String accessKeySecret="dqcsM82PVeS2KwNEMRXDK5jhOfU2kO";
+	private final String accessKeySecret="urAliYunOSSConfig.accessKeySecret";
 
-	private String bucketName="amamiyarenbucket";
+	private String bucketName="urAliYunOSSConfig.bucketName";
 
 	@Bean(name = "ossClient")
 	public OSS oSSClient() {

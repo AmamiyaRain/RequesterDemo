@@ -9,9 +9,9 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class SMSEntity {
 
-	private String smsid="cb1a5f7d62914a2fbd6768ea29d9e3ec";
+	private String smsid="urSmsId";
 
-	private String smskey="531bff5d900f461e8ee0eb11060b9c43";
+	private String smskey="urSmsKey";
 
 	private String token;
 
